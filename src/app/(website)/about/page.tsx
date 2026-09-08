@@ -31,11 +31,26 @@ export default function About() {
     </section>
 
     <section className="section">
+      <div className="container">
+        <SectionTitle eyebrow="From the Club" title="A community that shows up together." text="Moments from Global Voize Club gatherings, celebrations and member activities."/>
+        <div className="club-photo-grid">
+          {[
+            ['/images/club/members-at-event.jpeg', 'Members at a club event'],
+            ['/images/club/club-celebration.jpeg', 'Club celebration'],
+            ['/images/club/members-group.jpeg', 'Members together'],
+            ['/images/club/club-leaders.jpeg', 'Club leaders'],
+          ].map(([src, alt]) => <img key={src} src={src} alt={alt} className="club-photo"/>)}
+        </div>
+      </div>
+    </section>
+
+    <section className="section">
       <div className="container" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:60}}>
         <SectionTitle eyebrow="Who We Are" title="A community organisation founded on solidarity and service."/>
         <div>
           <p style={{color:'var(--muted)',lineHeight:1.8,fontSize:17}}>ONE VOIZE FRIENDS CLUB OF LAGOS is a not-for-profit and non-political organisation. Its constitution states that the association exists to promote integrity, uplift its members, support one another, give to less privileged people, and advance goodwill, peace, unity and progress.</p>
           <p style={{color:'var(--muted)',lineHeight:1.8,fontSize:17}}>The organisation was incorporated in Nigeria on <strong>{siteConfig.incorporationDate}</strong> as an incorporated trustee. Its registered address is <strong>{siteConfig.registeredAddress}</strong>.</p>
+          <Link href="/constitution" className="btn btn-light">Read the full constitution</Link>
         </div>
       </div>
     </section>
