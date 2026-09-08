@@ -1,0 +1,5 @@
+import crypto from 'node:crypto'
+import { NextResponse } from 'next/server'
+import { flutterwaveVerify } from '@/lib/payments/flutterwave'
+import { finalizeDonation } from '@/lib/payments/finalize'
+export async function POST(request:Request){const raw=await request.text();const signature=request.headers.get('flutterwave-signature')||'';const secret=process.env.FLUTTERWAVE_SECRET_HASH||'';const expected=crypto.createHmac('sha256',secret).update(raw).digest('base64');if(!secret||!signature||!crypto.timingSafeEqual(Buffer.from(expected),Buffer.from(signature)))return new NextResponse('Unauthorized',{status:401});try{const event=JSON.parse(raw);const txRef=event.data?.tx_ref;const id=event.data?.id;if(txRef&&id){const tx=await flutterwaveVerify(String(id));if(String(tx.tx_ref)===String(txRef))await finalizeDonation({reference:String(txRef),gateway:'flutterwave',gatewayTransactionId:tx.id,amount:Number(tx.amount),currency:tx.currency,status:tx.status==='successful'?'success':'failed',raw:tx})}return NextResponse.json({received:true})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Webhook failed'},{status:500})}}

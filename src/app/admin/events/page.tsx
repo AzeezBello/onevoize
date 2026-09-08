@@ -1,0 +1,3 @@
+import CrudPage from '@/components/admin/CrudPage'
+import { requireAdmin } from '@/lib/admin'
+export default async function Page(){const {supabase}=await requireAdmin();const {data}=await supabase.from('events').select('*').order('created_at',{ascending:false});return <CrudPage title="Events" description="Create and manage upcoming and past events." table="events" displayKey="title" subtitleKey="description" fields={[{key:'title',label:'Event title',required:true},{key:'description',label:'Description',type:'textarea'},{key:'location',label:'Location'},{key:'event_date',label:'Event date',type:'date',required:true},{key:'image_url',label:'Image URL',type:'url'}]} initialRows={data||[]}/>} 

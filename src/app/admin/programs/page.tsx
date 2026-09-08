@@ -1,0 +1,3 @@
+import CrudPage from '@/components/admin/CrudPage'
+import { requireAdmin } from '@/lib/admin'
+export default async function Page(){const {supabase}=await requireAdmin();const {data}=await supabase.from('programs').select('*').order('created_at',{ascending:false});return <CrudPage title="Programs" description="Manage the NGO programs shown on the public website." table="programs" displayKey="name" subtitleKey="description" fields={[{key:'name',label:'Program name',required:true},{key:'description',label:'Description',type:'textarea',required:true},{key:'image_url',label:'Image URL',type:'url'}]} initialRows={data||[]}/>} 
