@@ -71,7 +71,7 @@ function BulletList({ items }: { items: string[] }) {
 
 export default function Constitution() {
   return <>
-    <section className="section" style={{ background: '#eef1eb' }}>
+    <section className="section" style={{ background: 'var(--surface)' }}>
       <div className="container">
         <div className="eyebrow">Governance Document</div>
         <h1 className="serif" style={{ fontSize: 'clamp(48px,7vw,78px)', maxWidth: 900, lineHeight: 1, marginBottom: 24 }}>Global Voize Club Constitution</h1>
@@ -94,7 +94,7 @@ export default function Constitution() {
         <Article number="3" title="Membership">
           <SectionTitle eyebrow="Eligibility and rights" title="Membership standards" />
           <BulletList items={membershipRules} />
-          <div style={{ marginTop: 30, padding: 24, background: '#f7f5ef', borderRadius: 18 }}>
+          <div style={{ marginTop: 30, padding: 24, background: 'var(--surface)', borderRadius: 18 }}>
             <h3 className="serif" style={{ fontSize: 28, margin: '0 0 14px' }}>Dues and fees</h3>
             <BulletList items={[
               'One million Naira monthly contribution (Ajo), for members who can participate.',
@@ -156,8 +156,8 @@ export default function Constitution() {
           <BulletList items={conductRules} />
         </Article>
 
-        <section style={{ marginTop: 18, padding: 36, background: 'var(--brand)', color: '#fff', borderRadius: 22, textAlign: 'center' }}>
-          <div className="eyebrow" style={{ color: '#d8a84e' }}>Our Motto</div>
+        <section style={{ marginTop: 18, padding: 36, background: 'var(--brand)', color: 'white', borderRadius: 22, textAlign: 'center' }}>
+          <div className="eyebrow" style={{ color: 'var(--accent)' }}>Our Motto</div>
           <h2 className="serif" style={{ fontSize: 'clamp(34px,5vw,52px)', margin: '12px 0 0' }}>GLOBAL VOIZE... One Voize</h2>
         </section>
         <div style={{ marginTop: 30 }}><Link href="/about" className="btn btn-light">Back to About</Link></div>

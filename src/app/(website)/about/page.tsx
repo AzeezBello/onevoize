@@ -3,11 +3,12 @@ import { SectionTitle } from '@/components/SectionTitle';
 import { siteConfig } from '@/lib/site';
 
 const trustees = [
-  ['Olaiya Ibrahim', 'Chairman / Trustee'],
-  ['Kabiru Adesanya', 'Trustee'],
-  ['Waleade Idowu', 'Trustee'],
-  ['Olufemi Jeje', 'Trustee'],
-  ['Awogbadebo Alabi', 'Secretary / Trustee'],
+  ['Olaiya Ibrahim Olatunbosun', 'President', '/images/trustee-portraits/olaiya-ibrahim.jpeg'],
+  ['Kabiru Adesanya', 'Public Relations Officer', '/images/trustee-portraits/kabiru-adesanya.jpeg'],
+  ['Waleade Idowu Aseniyi', 'Social Secretary', '/images/trustee-portraits/waleade-idowu.jpeg'],
+  ['Olufemi Jeje', 'Financial Secretary', '/images/trustee-portraits/olufemi-jeje.jpeg'],
+  ['Awogbadebo Alabi Mobolaji', 'General Secretary', '/images/trustee-portraits/awogbadebo-alabi.jpeg'],
+  ['Bariyi Fowora Shoniyi', 'Assistant General Secretary', '/images/trustee-portraits/bariyi-fowora-shoniyi.jpeg'],
 ];
 
 const governingBody = [
@@ -22,7 +23,7 @@ const governingBody = [
 
 export default function About() {
   return <>
-    <section className="section" style={{background:'#eef1eb'}}>
+    <section className="section" style={{background:'var(--surface)'}}>
       <div className="container">
         <div className="eyebrow">About Us</div>
         <h1 className="serif" style={{fontSize:'clamp(48px,7vw,78px)',maxWidth:900,lineHeight:1}}>One organisation. One voice. A commitment to giving back.</h1>
@@ -55,11 +56,11 @@ export default function About() {
       </div>
     </section>
 
-    <section className="section" style={{background:'#f7f5ef'}}>
+    <section className="section" style={{background:'var(--surface)'}}>
       <div className="container">
         <SectionTitle eyebrow="Aims & Objectives" title="Putting integrity, mutual support and community goodwill into action." text="The constitution identifies the promotion of integrity, mutual uplift, support for one another, giving to less privileged people, goodwill, unity, peace and progress as the association's stated objective."/>
         <div className="grid-auto" style={{marginTop:28}}>
-          {['Promote integrity','Uplift ourselves and support each other','Give to less privileged people','Advance goodwill and peace','Promote unity and progress'].map((item,i)=><div key={item} style={{background:'#fff',padding:24,borderRadius:20,border:'1px solid var(--border)'}}><div className="eyebrow">0{i+1}</div><h3 className="serif" style={{fontSize:25,margin:'8px 0 0'}}>{item}</h3></div>)}
+          {['Promote integrity','Uplift ourselves and support each other','Give to less privileged people','Advance goodwill and peace','Promote unity and progress'].map((item,i)=><div key={item} style={{background:'var(--card)',padding:24,borderRadius:20,border:'1px solid var(--border)'}}><div className="eyebrow">0{i+1}</div><h3 className="serif" style={{fontSize:25,margin:'8px 0 0'}}>{item}</h3></div>)}
         </div>
       </div>
     </section>
@@ -68,28 +69,28 @@ export default function About() {
       <div className="container">
         <SectionTitle eyebrow="Registered Trustees" title="The trustees responsible for the incorporated body." text="The Certificate of Incorporation records the duly appointed trustees of ONE VOIZE FRIENDS CLUB OF LAGOS. Biographical information can be added through the CMS when approved for publication."/>
         <div className="grid-auto">
-          {trustees.map(([name,role])=><article key={name} style={{background:'#fff',padding:22,borderRadius:22,border:'1px solid var(--border)'}}><div style={{height:170,borderRadius:16,background:'linear-gradient(135deg,#cad8cf,#e7d6ad)'}}/><h3 className="serif" style={{fontSize:25,margin:'18px 0 4px'}}>{name}</h3><div className="eyebrow">{role}</div><p style={{color:'var(--muted)',lineHeight:1.6}}>Profile biography placeholder.</p></article>)}
+          {trustees.map(([name,role,image])=><article key={name} style={{background:'var(--card)',padding:22,borderRadius:22,border:'1px solid var(--border)'}}><img src={image} alt={`${name}, ${role}`} style={{width:'100%',height:230,borderRadius:16,objectFit:'cover',objectPosition:'center'}}/><h3 className="serif" style={{fontSize:25,margin:'18px 0 4px'}}>{name}</h3><div className="eyebrow">{role}</div></article>)}
         </div>
       </div>
     </section>
 
-    <section className="section" style={{background:'#f7f5ef'}}>
+    <section className="section" style={{background:'var(--surface)'}}>
       <div className="container">
         <SectionTitle eyebrow="Governing Body" title="A defined structure for administration and accountability."/>
         <div className="grid-auto">
-          {governingBody.map((role,i)=><div key={role} style={{padding:22,border:'1px solid var(--border)',borderRadius:18,background:'#fff'}}><div className="eyebrow">0{i+1}</div><strong>{role}</strong></div>)}
+          {governingBody.map((role,i)=><div key={role} style={{padding:22,border:'1px solid var(--border)',borderRadius:18,background:'var(--card)'}}><div className="eyebrow">0{i+1}</div><strong>{role}</strong></div>)}
         </div>
       </div>
     </section>
 
     <section className="section">
       <div className="container" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24}}>
-        <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:22,padding:28}}>
+        <div style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:22,padding:28}}>
           <div className="eyebrow">Registration</div><h2 className="serif" style={{fontSize:32}}>Corporate Affairs Commission</h2>
           <p style={{color:'var(--muted)',lineHeight:1.7}}>Certificate of Incorporation registration number: <strong>{siteConfig.registrationNumber}</strong></p>
           <p style={{color:'var(--muted)',lineHeight:1.7}}>Tax Identification Number: <strong>{siteConfig.taxIdentificationNumber}</strong></p>
         </div>
-        <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:22,padding:28}}>
+        <div style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:22,padding:28}}>
           <div className="eyebrow">Registered Address</div><h2 className="serif" style={{fontSize:32}}>Lagos, Nigeria</h2>
           <p style={{color:'var(--muted)',lineHeight:1.7}}>{siteConfig.registeredAddress}</p>
         </div>
@@ -97,7 +98,7 @@ export default function About() {
     </section>
 
     <section className="section" style={{background:'var(--brand)',color:'#fff'}}>
-      <div className="container"><SectionTitle eyebrow="Transparency & Governance" title="Trust is built through accountability." text="The organisation's constitution provides for trustees, meetings, financial controls, annual independent auditing and a special clause requiring income and property to be applied solely toward its objectives."/><Link href="/contact" className="btn" style={{background:'#fff',color:'var(--brand)'}}>Contact us</Link></div>
+      <div className="container"><SectionTitle eyebrow="Transparency & Governance" title="Trust is built through accountability." text="The organisation's constitution provides for trustees, meetings, financial controls, annual independent auditing and a special clause requiring income and property to be applied solely toward its objectives."/><Link href="/contact" className="btn" style={{background:'var(--card)',color:'var(--brand)'}}>Contact us</Link></div>
     </section>
   </>;
 }
