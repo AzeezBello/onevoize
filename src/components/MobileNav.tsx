@@ -7,9 +7,9 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 
 const links = [
   ['Home', '/'],
-  ['About us', '/about'],
-  ['Exco / members', '/exco'],
-  ['Club committee', '/committee'],
+  ['About us', '/about#about-us'],
+  ['Exco / members', '/about#exco-members'],
+  ['Club committee', '/about#club-committee'],
   ['Gallery / past events / videos', '/gallery'],
   ['Membership form', '/membership'],
 ]
@@ -23,7 +23,7 @@ export function MobileNav() {
     </button>
     {open && <nav className="mobile-nav" aria-label="Mobile navigation">
       {links.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>)}
-      <div className="mobile-nav-actions"><ThemeToggle/><Link href="/donate" className="btn btn-primary" onClick={() => setOpen(false)}>Donation / support / pay dues</Link></div>
+      <div className="mobile-nav-actions"><ThemeToggle/><Link href="/donate" className="btn btn-primary" onClick={() => setOpen(false)}>Donate</Link></div>
     </nav>}
   </div>
 }

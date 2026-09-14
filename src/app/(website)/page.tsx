@@ -1,6 +1,67 @@
-import Link from 'next/link';
-import { ArrowRight, HeartHandshake, Users, Globe2, HandHeart } from 'lucide-react';
-import { SectionTitle } from '@/components/SectionTitle';
-const programs=[['Education & Learning','Creating pathways to learning and opportunity for children and young people.'],['Community Health','Supporting healthier communities through outreach, awareness, and practical support.'],['Youth Empowerment','Equipping young people with skills, confidence, and opportunities to thrive.']];
-const posts=[['Impact Story','How Small Acts of Giving Create Big Change'],['News & Updates','Inside Our Latest Community Outreach Project'],['Insights','Five Ways You Can Give Back to Your Community']];
-export default function Home(){return <><section style={{background:'linear-gradient(120deg,#153e2c 0%,#245a40 60%,#d2a04c 180%)',color:'#fff',padding:'110px 0 105px'}}><div className="container"><div style={{maxWidth:780}}><div className="eyebrow" style={{color:'#e8c779'}}>TOGETHER, WE GIVE BACK</div><h1 className="serif" style={{fontSize:'clamp(52px,8vw,88px)',lineHeight:.96,margin:'16px 0 24px'}}>Creating change that reaches beyond today.</h1><p style={{fontSize:19,lineHeight:1.7,color:'#dce7df',maxWidth:650}}>[Placeholder] ONE VOIZE FRIENDS CLUB OF LAGOS works alongside communities to create opportunity, support people, and build a more hopeful future.</p><div style={{display:'flex',gap:12,flexWrap:'wrap',marginTop:30}}><Link href="/donate" className="btn" style={{background:'#fff',color:'var(--brand)'}}>Donate Now <ArrowRight size={17} style={{marginLeft:8}}/></Link><Link href="/programs" className="btn" style={{border:'1px solid rgba(255,255,255,.4)',color:'#fff'}}>Explore Our Work</Link></div></div></div></section><section className="section"><div className="container"><div className="grid-auto">{[['10,000+','People reached',Users],['25+','Communities served',Globe2],['50+','Projects completed',HeartHandshake],['500+','Volunteers',HandHeart]].map(([n,l,I])=><div key={l as string} style={{padding:28,background:'#fff',border:'1px solid var(--border)',borderRadius:20}}><div style={{color:'var(--brand)',marginBottom:22}}>{I&&<I size={25}/>}</div><div className="serif" style={{fontSize:42,fontWeight:700}}>{n as string}</div><div style={{color:'var(--muted)',marginTop:5}}>{l as string}</div></div>)}</div></div></section><section className="section" style={{paddingTop:20}}><div className="container"><SectionTitle eyebrow="Our Work" title="Practical action. Human impact." text="[Placeholder] Explore the programs and projects through which ONE VOIZE FRIENDS CLUB OF LAGOS partners with communities."/><div className="grid-auto">{programs.map(([t,d],i)=><article key={t} style={{background:'#fff',border:'1px solid var(--border)',borderRadius:24,overflow:'hidden'}}><div style={{height:220,background:`linear-gradient(135deg,#dfe8df,${i===1?'#ead7ad':'#b9d0c1'})`}}/><div style={{padding:25}}><div className="eyebrow">0{i+1}</div><h3 className="serif" style={{fontSize:28,margin:'8px 0'}}>{t}</h3><p style={{color:'var(--muted)',lineHeight:1.65}}>{d}</p><Link href="/programs" style={{color:'var(--brand)',fontWeight:700}}>Learn more →</Link></div></article>)}</div></div></section><section className="section" style={{background:'#f0eee6'}}><div className="container"><SectionTitle eyebrow="Featured Campaign" title="Help us build a better future." text="[Placeholder] Support a current campaign and help move a community project from vision to reality."/><div style={{background:'#fff',borderRadius:26,overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr'}} className="campaign-feature"><div style={{minHeight:380,background:'linear-gradient(135deg,#b9cdbd,#e6d0a0)'}}/><div style={{padding:40}}><div className="eyebrow">Education & Opportunity</div><h3 className="serif" style={{fontSize:40,lineHeight:1.05}}>Education for Every Child</h3><p style={{color:'var(--muted)',lineHeight:1.7}}>[Placeholder campaign description explaining the need, the intervention, and the expected impact.]</p><div style={{marginTop:25}}><div style={{display:'flex',justifyContent:'space-between',fontWeight:700}}><span>₦7,500,000 raised</span><span>75%</span></div><div style={{height:10,background:'#e5e8e1',borderRadius:20,margin:'10px 0 22px'}}><div style={{height:'100%',width:'75%',background:'var(--brand)',borderRadius:20}}/></div><div style={{color:'var(--muted)',fontSize:14}}>Goal: ₦10,000,000</div></div><Link href="/donate" className="btn btn-primary" style={{marginTop:24}}>Support this campaign</Link></div></div></div></section><section className="section"><div className="container"><SectionTitle eyebrow="Stories & News" title="See the work. Hear the stories."/><div className="grid-auto">{posts.map(([c,t],i)=><article key={t}><div style={{height:210,borderRadius:20,background:`linear-gradient(135deg,${i===0?'#b7cdbd':i===1?'#d7c8a4':'#c4cdd4'},#f1eee5)`}}/><div className="eyebrow" style={{marginTop:20}}>{c}</div><h3 className="serif" style={{fontSize:27,margin:'7px 0 10px'}}>{t}</h3><Link href="/blog" style={{fontWeight:700,color:'var(--brand)'}}>Read story →</Link></article>)}</div></div></section><section style={{padding:'80px 0',background:'var(--brand)',color:'#fff'}}><div className="container" style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:30,flexWrap:'wrap'}}><div><div className="eyebrow" style={{color:'#e8c779'}}>YOUR SUPPORT MATTERS</div><h2 className="serif" style={{fontSize:48,margin:'10px 0'}}>There are many ways to give back.</h2></div><Link href="/volunteer" className="btn" style={{background:'#fff',color:'var(--brand)'}}>Get Involved</Link></div></section><style>{`@media(max-width:800px){.campaign-feature{grid-template-columns:1fr!important}.campaign-feature>div:first-child{min-height:240px!important}}`}</style></>}
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight, HeartHandshake, Users, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { siteConfig } from '@/lib/site'
+
+const trustees = [
+  ['Olaiya Ibrahim Olatunbosun', 'President', '/images/trustee-portraits/olaiya-ibrahim.jpeg'],
+  ['Kabiru Adesanya', 'Public Relations Officer', '/images/trustee-portraits/kabiru-adesanya.jpeg'],
+  ['Waleade Idowu Aseniyi', 'Social Secretary', '/images/trustee-portraits/waleade-idowu.jpeg'],
+]
+
+const values: Array<[string, string, LucideIcon]> = [
+  ['Mutual support', 'We uplift ourselves and stand together through life\'s important moments.', Users],
+  ['Service', 'We give time, resources and care to less privileged people in Africa.', HeartHandshake],
+  ['Responsibility', 'We represent Global Voize with integrity wherever we are invited.', ShieldCheck],
+]
+
+export default function Home() {
+  return <main>
+    <section className="home-hero">
+      <div className="container home-hero-inner">
+        <div className="home-hero-copy">
+          <div className="eyebrow home-eyebrow">GLOBAL VOIZE CLUB</div>
+          <h1 className="serif">One club.<br/><span>One voize.</span></h1>
+          <p>ONE VOIZE FRIENDS CLUB OF LAGOS is a community built on friendship, mutual support and practical service.</p>
+          <div className="home-actions">
+            <Link href="/membership" className="btn home-primary-action">Become a member <ArrowRight size={17}/></Link>
+            <Link href="/donate" className="btn home-secondary-action">Support the club</Link>
+          </div>
+        </div>
+        <div className="home-hero-image">
+          <Image src="/images/club/members-group.jpeg" alt="Global Voize Club members gathered together" fill priority sizes="(max-width: 800px) 100vw, 48vw"/>
+          <div className="home-photo-note"><span>Since 2025</span><strong>Friends who show up.</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section className="home-intro section">
+      <div className="container home-intro-grid">
+        <div><div className="eyebrow">Our purpose</div><h2 className="serif">Good friendship becomes meaningful service.</h2></div>
+        <div><p className="home-lead">We are a not-for-profit and non-political club committed to integrity, unity, peace and progress.</p><p className="home-muted">From member support to charitable giving, Global Voize creates a dependable community where people contribute, connect and leave a positive mark.</p><Link href="/about" className="text-link">Learn about the club <ArrowRight size={16}/></Link></div>
+      </div>
+    </section>
+
+    <section className="section home-values">
+      <div className="container">
+        <div className="home-section-heading"><div><div className="eyebrow">What guides us</div><h2 className="serif">Our values are lived together.</h2></div><Link href="/constitution" className="text-link">Read the constitution <ArrowRight size={16}/></Link></div>
+        <div className="home-value-grid">{values.map(([title, description, Icon]) => <article key={title} className="home-value-card"><div className="home-icon"><Icon size={22}/></div><h3 className="serif">{title}</h3><p>{description}</p></article>)}</div>
+      </div>
+    </section>
+
+    <section className="section home-community">
+      <div className="container home-community-grid">
+        <div className="home-community-photo"><Image src="/images/club/members-at-event.jpeg" alt="Global Voize Club members at an event" fill sizes="(max-width: 800px) 100vw, 50vw"/></div>
+        <div className="home-community-copy"><div className="eyebrow">The club in motion</div><h2 className="serif">Connection is part of the work.</h2><p>Our outings, celebrations and gatherings make room for friendship, belonging and the shared responsibility to give back.</p><div className="home-link-row"><Link href="/gallery" className="btn btn-primary">View the gallery <ArrowRight size={17}/></Link><Link href="/events" className="text-link">See events <ArrowRight size={16}/></Link></div></div>
+      </div>
+    </section>
+
+    <section className="section home-leadership">
+      <div className="container"><div className="home-section-heading"><div><div className="eyebrow">Leadership</div><h2 className="serif">People entrusted to serve.</h2></div><Link href="/about#exco-members" className="text-link">Meet the Exco <ArrowRight size={16}/></Link></div><div className="home-trustee-grid">{trustees.map(([name, role, image]) => <Link href="/about#exco-members" className="home-trustee" key={name}><div className="home-trustee-image"><Image src={image} alt={`${name}, ${role}`} fill sizes="(max-width: 800px) 100vw, 33vw"/></div><strong>{name}</strong><span>{role}</span></Link>)}</div></div>
+    </section>
+
+    <section className="home-cta"><div className="container home-cta-inner"><div><div className="eyebrow home-eyebrow">Your place in the club</div><h2 className="serif">Show up for something that matters.</h2></div><div className="home-actions"><Link href="/membership" className="btn home-primary-action">Join the club <ArrowRight size={17}/></Link><Link href="/donate" className="btn home-secondary-action">Donate</Link></div></div></section>
+
+    <div className="sr-only">{siteConfig.displayName}: {siteConfig.description}</div>
+  </main>
+}

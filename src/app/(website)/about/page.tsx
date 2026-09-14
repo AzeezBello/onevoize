@@ -23,7 +23,7 @@ const governingBody = [
 
 export default function About() {
   return <>
-    <section className="section" style={{background:'var(--surface)'}}>
+    <section id="about-us" className="section" style={{background:'var(--surface)'}}>
       <div className="container">
         <div className="eyebrow">About Us</div>
         <h1 className="serif" style={{fontSize:'clamp(48px,7vw,78px)',maxWidth:900,lineHeight:1}}>One organisation. One voice. A commitment to giving back.</h1>
@@ -31,7 +31,7 @@ export default function About() {
       </div>
     </section>
 
-    <section className="section">
+    <section id="exco-members" className="section">
       <div className="container">
         <SectionTitle eyebrow="From the Club" title="A community that shows up together." text="Moments from Global Voize Club gatherings, celebrations and member activities."/>
         <div className="club-photo-grid">
@@ -56,7 +56,7 @@ export default function About() {
       </div>
     </section>
 
-    <section className="section" style={{background:'var(--surface)'}}>
+    <section id="club-committee" className="section" style={{background:'var(--surface)'}}>
       <div className="container">
         <SectionTitle eyebrow="Aims & Objectives" title="Putting integrity, mutual support and community goodwill into action." text="The constitution identifies the promotion of integrity, mutual uplift, support for one another, giving to less privileged people, goodwill, unity, peace and progress as the association's stated objective."/>
         <div className="grid-auto" style={{marginTop:28}}>
