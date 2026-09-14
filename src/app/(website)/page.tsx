@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, HeartHandshake, Users, ShieldCheck, type LucideIcon } from 'lucide-react'
 import { siteConfig } from '@/lib/site'
+import { HomeGallerySlider } from '@/components/HomeGallerySlider'
 
 const trustees = [
   ['Olaiya Ibrahim Olatunbosun', 'President', '/images/trustee-portraits/olaiya-ibrahim.jpeg'],
@@ -51,6 +52,10 @@ export default function Home() {
         <div className="home-community-photo"><Image src="/images/club/members-at-event.jpeg" alt="Global Voize Club members at an event" fill sizes="(max-width: 800px) 100vw, 50vw"/></div>
         <div className="home-community-copy"><div className="eyebrow">The club in motion</div><h2 className="serif">Connection is part of the work.</h2><p>Our outings, celebrations and gatherings make room for friendship, belonging and the shared responsibility to give back.</p><div className="home-link-row"><Link href="/gallery" className="btn btn-primary">View the gallery <ArrowRight size={17}/></Link><Link href="/events" className="text-link">See events <ArrowRight size={16}/></Link></div></div>
       </div>
+    </section>
+
+    <section className="section home-gallery">
+      <div className="container"><HomeGallerySlider/></div>
     </section>
 
     <section className="section home-leadership">

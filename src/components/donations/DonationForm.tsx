@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 const amounts = [5000, 10000, 25000, 50000]
 
@@ -39,7 +41,7 @@ export default function DonationForm({ campaignId }: { campaignId?: string }) {
     }
   }
 
-  return <form onSubmit={submit} className="donation-card" noValidate>
+  return <Card className="donation-card"><CardContent><form onSubmit={submit} className="donation-card" noValidate>
     <div className="amount-grid">{amounts.map(value => <button type="button" key={value} className={amount === value && !custom ? 'selected' : ''} onClick={() => { setAmount(value); setCustom('') }}>₦{value.toLocaleString()}</button>)}</div>
     <label className="sr-only" htmlFor="custom-amount">Custom amount</label><input id="custom-amount" value={custom} onChange={event => setCustom(event.target.value.replace(/[^0-9]/g, ''))} placeholder="Custom amount" inputMode="numeric"/>
     <label className="sr-only" htmlFor="donor-name">Full name</label><input id="donor-name" required minLength={2} value={name} onChange={event => setName(event.target.value)} placeholder="Full name"/>
@@ -47,6 +49,6 @@ export default function DonationForm({ campaignId }: { campaignId?: string }) {
     <label className="sr-only" htmlFor="payment-gateway">Payment gateway</label><select id="payment-gateway" value={gateway} onChange={event => setGateway(event.target.value as 'paystack' | 'flutterwave')}><option value="paystack">Pay with Paystack</option><option value="flutterwave">Pay with Flutterwave</option></select>
     <label className="check"><input type="checkbox" checked={anonymous} onChange={event => setAnonymous(event.target.checked)}/> Make my donation anonymous</label>
     {error && <p role="alert" style={{ color: '#b42318', margin: 0 }}>{error}</p>}
-    <button className="btn btn-primary" type="submit" disabled={loading} style={{ border: 0, cursor: loading ? 'wait' : 'pointer' }}>{loading ? <><Loader2 className="spin" size={17}/> Starting payment…</> : 'Continue to payment'}</button>
-  </form>
+    <Button className="btn btn-primary" type="submit" disabled={loading} style={{ border: 0, cursor: loading ? 'wait' : 'pointer' }}>{loading ? <><Loader2 className="spin" size={17}/> Starting payment…</> : 'Continue to payment'}</Button>
+  </form></CardContent></Card>
 }

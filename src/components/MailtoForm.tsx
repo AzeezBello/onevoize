@@ -1,9 +1,12 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { siteConfig } from '@/lib/site'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 
-type MailtoField = {
+type FormField = {
   label: string
   name: string
   type?: 'text' | 'email' | 'tel' | 'textarea'
@@ -13,27 +16,110 @@ type MailtoField = {
 
 type MailtoFormProps = {
   subject: string
-  submitLabel: string
-  successMessage: string
-  fields: MailtoField[]
+  submitLabel?: string
+  successMessage?: string
+  fields: FormField[]
   className?: string
   style?: React.CSSProperties
 }
 
-export function MailtoForm({ subject, submitLabel, successMessage, fields, className, style }: MailtoFormProps) {
-  const [submitted, setSubmitted] = useState(false)
+export function MailtoForm({
+  subject,
+  submitLabel = 'Submit',
+  successMessage,
+  fields,
+  className = '',
+  style,
+}: MailtoFormProps) {
+  const [values, setValues] = useState<Record<string, string>>({})
+  const [message, setMessage] = useState('')
 
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const body = fields.map(field => `${field.label}: ${data.get(field.name) || ''}`).join('\n\n')
-    window.location.href = `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSubmitted(true)
+  function updateField(name: string, value: string) {
+    setValues((current) => ({
+      ...current,
+      [name]: value,
+    }))
   }
 
-  return <form onSubmit={submit} className={className} style={style}>
-    {fields.map(field => field.type === 'textarea' ? <label key={field.name} style={{ display: 'grid', gap: 7, fontWeight: 700, fontSize: 14 }}>{field.label}<textarea name={field.name} required={field.required} minLength={field.minLength} rows={5} placeholder={field.label} style={{ padding: 13, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--card)', color: 'var(--foreground)' }}/></label> : <label key={field.name} style={{ display: 'grid', gap: 7, fontWeight: 700, fontSize: 14 }}>{field.label}<input name={field.name} type={field.type || 'text'} required={field.required} minLength={field.minLength} pattern={field.type === 'tel' ? '[0-9+() -]{7,}' : undefined} title={field.type === 'tel' ? 'Enter a valid phone number.' : undefined} placeholder={field.label} style={{ padding: 13, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--card)', color: 'var(--foreground)' }}/></label>)}
-    <button className="btn btn-primary" type="submit" style={{ border: 0, cursor: 'pointer' }}>{submitted ? 'Email draft opened' : submitLabel}</button>
-    {submitted && <p role="status" style={{ color: 'var(--brand)', margin: 0 }}>{successMessage}</p>}
-  </form>
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const body = fields
+      .map((field) => {
+        const value = values[field.name] || ''
+        return `${field.label}:\n${value}`
+      })
+      .join('\n\n')
+
+    const mailtoUrl =
+      `mailto:?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`
+
+    window.location.href = mailtoUrl
+
+    setMessage(
+      successMessage ||
+        'Your email draft is ready. Please review and send it.',
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className={className} style={style}>
+      {fields.map((field) => {
+        const fieldId = `membership-${field.name}`
+
+        return (
+          <div key={field.name} className="space-y-2">
+            <Label htmlFor={fieldId}>
+              {field.label}
+              {field.required && (
+                <span className="ml-1 text-destructive">*</span>
+              )}
+            </Label>
+
+            {field.type === 'textarea' ? (
+              <Textarea
+                id={fieldId}
+                name={field.name}
+                value={values[field.name] || ''}
+                onChange={(event) =>
+                  updateField(field.name, event.target.value)
+                }
+                required={field.required}
+                minLength={field.minLength}
+                placeholder={`Enter ${field.label.toLowerCase()}`}
+                className="min-h-32 resize-y"
+              />
+            ) : (
+              <Input
+                id={fieldId}
+                name={field.name}
+                type={field.type || 'text'}
+                value={values[field.name] || ''}
+                onChange={(event) =>
+                  updateField(field.name, event.target.value)
+                }
+                required={field.required}
+                minLength={field.minLength}
+                placeholder={`Enter ${field.label.toLowerCase()}`}
+              />
+            )}
+          </div>
+        )
+      })}
+
+      <Button type="submit" className="w-full">
+        {submitLabel}
+      </Button>
+
+      {message && (
+        <p
+          role="status"
+          className="rounded-lg bg-muted px-4 py-3 text-sm leading-6 text-muted-foreground"
+        >
+          {message}
+        </p>
+      )}
+    </form>
+  )
 }

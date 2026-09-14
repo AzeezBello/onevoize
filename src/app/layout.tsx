@@ -3,6 +3,12 @@ import './globals.css';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { siteConfig } from '@/lib/site';
+import { Noto_Sans, Montserrat } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const montserrat = Montserrat({subsets:['latin'],variable:'--font-heading'});
+
+const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: `${siteConfig.displayName} | ${siteConfig.tagline}`,
@@ -20,6 +26,12 @@ export const metadata: Metadata = {
     siteName: siteConfig.displayName,
   },
   twitter: { card: 'summary_large_image', title: siteConfig.displayName, description: siteConfig.description },
+  icons: {
+    icon: '/images/ONE VOICE LOGO.png',
+    shortcut: '/images/ONE VOICE LOGO.png',
+    apple: '/images/ONE VOICE LOGO.png',
+  },
+  manifest: '/images/ONE VOICE LOGO.png',
 };
 
 export const viewport: Viewport = {
@@ -29,5 +41,5 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body><Navbar/><main>{children}</main><Footer/></body></html>;
+  return <html lang="en" className={cn("font-sans", notoSans.variable, montserrat.variable)}><body><Navbar/><main>{children}</main><Footer/></body></html>;
 }
