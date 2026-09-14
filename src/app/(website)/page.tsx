@@ -18,21 +18,18 @@ const values: Array<[string, string, LucideIcon]> = [
 export default function Home() {
   return <main>
     <section className="home-hero">
+      <video className="home-hero-video" autoPlay muted loop playsInline poster="/images/club/members-group.jpeg" aria-hidden="true"><source src="/images/club/events.mp4" type="video/mp4"/></video>
+      <div className="home-hero-overlay"/>
       <div className="container home-hero-inner">
         <div className="home-hero-copy">
-          <div className="eyebrow home-eyebrow">GLOBAL VOIZE CLUB</div>
+          <div className="eyebrow home-eyebrow">GLOBAL VOIZE CLUB · LAGOS</div>
           <h1 className="serif">One club.<br/><span>One voize.</span></h1>
-          <p>ONE VOIZE FRIENDS CLUB OF LAGOS is a community built on friendship, mutual support and practical service.</p>
-          <div className="home-actions">
-            <Link href="/membership" className="btn home-primary-action">Become a member <ArrowRight size={17}/></Link>
-            <Link href="/donate" className="btn home-secondary-action">Support the club</Link>
-          </div>
+          <p>Friendship, mutual support and practical service for a community that shows up together.</p>
+          <div className="home-actions"><Link href="/membership" className="btn home-primary-action">Join the club <ArrowRight size={17}/></Link><Link href="/donate" className="btn home-secondary-action">Support our work</Link></div>
         </div>
-        <div className="home-hero-image">
-          <Image src="/images/club/members-group.jpeg" alt="Global Voize Club members gathered together" fill priority sizes="(max-width: 800px) 100vw, 48vw"/>
-          <div className="home-photo-note"><span>Since 2025</span><strong>Friends who show up.</strong></div>
-        </div>
+        <div className="home-hero-rail"><div className="home-hero-badge"><span>Since</span><strong>2025</strong><small>One organisation.<br/>One voice.</small></div><div className="home-hero-status"><span className="home-live-dot"/>Community in motion</div></div>
       </div>
+      <div className="container home-hero-footer"><span>Friendship</span><span>Service</span><span>Unity</span><span className="home-hero-scroll">Explore the club ↓</span></div>
     </section>
 
     <section className="home-intro section">
