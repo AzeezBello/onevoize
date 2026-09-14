@@ -8,12 +8,11 @@ function CompleteContent() {
 	const gateway = params.get('gateway')
 	const reference = params.get('reference') || ''
 	const transactionId = params.get('transaction_id') || params.get('transactionId') || ''
-	const [state, setState] = useState<'loading' | 'success' | 'failed'>('loading')
+	const [state, setState] = useState<'loading' | 'success' | 'failed'>(reference ? 'loading' : 'failed')
 	const [error, setError] = useState('')
-	const [token, setToken] = useState('')
 
 	useEffect(() => {
-		if (!reference) return setState('failed')
+		if (!reference) return
 
 		;(async () => {
 			try {
@@ -28,7 +27,6 @@ function CompleteContent() {
 				})
 				const data = await res.json()
 				if (!res.ok || !data.success) throw new Error(data.error || 'Payment could not be verified')
-				setToken(data.receiptToken || '')
 				setState('success')
 			} catch (e) {
 				setError(e instanceof Error ? e.message : 'Payment verification failed')
@@ -37,7 +35,7 @@ function CompleteContent() {
 		})()
 	}, [gateway, reference, transactionId])
 
-	return <main className="section"><div className="container" style={{ maxWidth: 720, textAlign: 'center' }}>{state === 'loading' ? <><h1 className="serif">Confirming your donation…</h1><p className="muted">Please wait while we securely verify your payment.</p></> : state === 'success' ? <><div className="eyebrow">Thank you</div><h1 className="serif">Your donation was successful.</h1><p className="muted">Reference: <strong>{reference}</strong></p><div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 28, flexWrap: 'wrap' }}><a className="btn btn-primary" href={`/api/receipts/${encodeURIComponent(reference)}${token ? `?token=${encodeURIComponent(token)}` : ''}`}>View / Print Receipt</a><Link className="btn btn-light" href="/">Return Home</Link></div></> : <><h1 className="serif">We could not confirm the payment.</h1><p className="muted">{error}</p><Link className="btn btn-primary" href="/donate">Try Again</Link></>}</div></main>
+	return <main className="section"><div className="container" style={{ maxWidth: 720, textAlign: 'center' }}>{state === 'loading' ? <><h1 className="serif">Confirming your donation…</h1><p className="muted">Please wait while we securely verify your payment.</p></> : state === 'success' ? <><div className="eyebrow">Thank you</div><h1 className="serif">Your donation was successful.</h1><p className="muted">Reference: <strong>{reference}</strong></p><Link className="btn btn-light" href="/">Return Home</Link></> : <><h1 className="serif">We could not confirm the payment.</h1><p className="muted">{error}</p><Link className="btn btn-primary" href="/donate">Try Again</Link></>}</div></main>
 }
 
 function LoadingState() {

@@ -4,15 +4,11 @@ import { Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false)
+  const [dark, setDark] = useState(() => typeof window !== 'undefined' && (window.localStorage.getItem('one-voize-theme') === 'dark' || (!window.localStorage.getItem('one-voize-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)))
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('one-voize-theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const isDark = saved ? saved === 'dark' : prefersDark
-    setDark(isDark)
-    document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
-  }, [])
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+  }, [dark])
 
   function toggleTheme() {
     const next = !dark

@@ -9,4 +9,5 @@ export const siteConfig = {
   taxIdentificationNumber: '33256537-0001',
   registeredAddress: '12, HOGAN BASSEY CRESCENT, SURULERE, LAGOS STATE, NIGERIA',
   incorporationDate: '3 June 2025',
+  contactEmail: 'onevoizefriendscluboflagos@gmail.com',
 } as const;

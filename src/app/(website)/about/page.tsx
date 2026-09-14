@@ -67,7 +67,7 @@ export default function About() {
 
     <section className="section">
       <div className="container">
-        <SectionTitle eyebrow="Registered Trustees" title="The trustees responsible for the incorporated body." text="The Certificate of Incorporation records the duly appointed trustees of ONE VOIZE FRIENDS CLUB OF LAGOS. Biographical information can be added through the CMS when approved for publication."/>
+        <SectionTitle eyebrow="Registered Trustees" title="The trustees responsible for the incorporated body." text="The Certificate of Incorporation records the duly appointed trustees of ONE VOIZE FRIENDS CLUB OF LAGOS."/>
         <div className="grid-auto">
           {trustees.map(([name,role,image])=><article key={name} style={{background:'var(--card)',padding:22,borderRadius:22,border:'1px solid var(--border)'}}><img src={image} alt={`${name}, ${role}`} style={{width:'100%',height:230,borderRadius:16,objectFit:'cover',objectPosition:'center'}}/><h3 className="serif" style={{fontSize:25,margin:'18px 0 4px'}}>{name}</h3><div className="eyebrow">{role}</div></article>)}
         </div>

@@ -1,3 +1,0 @@
-import CrudPage from '@/components/admin/CrudPage'
-import { requireAdmin } from '@/lib/admin'
-export default async function Page(){const {supabase}=await requireAdmin();const {data}=await supabase.from('team_members').select('*').order('created_at',{ascending:false});return <CrudPage title="Team" description="Manage staff and team member profiles." table="team_members" displayKey="name" subtitleKey="role" fields={[{key:'name',label:'Full name',required:true},{key:'role',label:'Role',required:true},{key:'bio',label:'Biography',type:'textarea'},{key:'photo_url',label:'Photo URL',type:'url'},{key:'linkedin_url',label:'LinkedIn URL',type:'url'}]} initialRows={data||[]}/>} 
