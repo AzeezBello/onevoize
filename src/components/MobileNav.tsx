@@ -11,7 +11,7 @@ const links = [
   ['Exco / members', '/about#exco-members'],
   ['Club committee', '/about#club-committee'],
   ['Gallery / past events / videos', '/gallery'],
-  ['Membership form', '/membership'],
+  ['Join us', '/membership'],
 ]
 
 export function MobileNav() {

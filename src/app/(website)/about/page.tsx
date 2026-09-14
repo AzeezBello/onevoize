@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SectionTitle } from '@/components/SectionTitle';
 import { siteConfig } from '@/lib/site';
+import { PageHero } from '@/components/PageHero';
 
 const trustees = [
   ['Olaiya Ibrahim Olatunbosun', 'President', '/images/trustee-portraits/olaiya-ibrahim.jpeg'],
@@ -11,27 +12,11 @@ const trustees = [
   ['Bariyi Fowora Shoniyi', 'Assistant General Secretary', '/images/trustee-portraits/bariyi-fowora-shoniyi.jpeg'],
 ];
 
-const governingBody = [
-  'President',
-  'Vice President',
-  'General Secretary',
-  'Treasurer',
-  'Provost / Public Relations Officer',
-  'Social Secretary',
-  'The Trustees',
-];
-
 export default function About() {
   return <>
-    <section id="about-us" className="section" style={{background:'var(--surface)'}}>
-      <div className="container">
-        <div className="eyebrow">About Us</div>
-        <h1 className="serif" style={{fontSize:'clamp(48px,7vw,78px)',maxWidth:900,lineHeight:1}}>One organisation. One voice. A commitment to giving back.</h1>
-        <p style={{maxWidth:760,color:'var(--muted)',fontSize:18,lineHeight:1.7}}>{siteConfig.description}</p>
-      </div>
-    </section>
+    <div id="about-us"><PageHero eyebrow="About us" title="One organisation. One voice." text={siteConfig.description} action={{ label: 'Read our constitution', href: '/constitution' }}/></div>
 
-    <section id="exco-members" className="section">
+    <section className="section">
       <div className="container">
         <SectionTitle eyebrow="From the Club" title="A community that shows up together." text="Moments from Global Voize Club gatherings, celebrations and member activities."/>
         <div className="club-photo-grid">
@@ -56,7 +41,7 @@ export default function About() {
       </div>
     </section>
 
-    <section id="club-committee" className="section" style={{background:'var(--surface)'}}>
+    <section className="section" style={{background:'var(--surface)'}}>
       <div className="container">
         <SectionTitle eyebrow="Aims & Objectives" title="Putting integrity, mutual support and community goodwill into action." text="The constitution identifies the promotion of integrity, mutual uplift, support for one another, giving to less privileged people, goodwill, unity, peace and progress as the association's stated objective."/>
         <div className="grid-auto" style={{marginTop:28}}>
@@ -65,20 +50,11 @@ export default function About() {
       </div>
     </section>
 
-    <section className="section">
+    <section id="exco-members" className="section">
       <div className="container">
         <SectionTitle eyebrow="Registered Trustees" title="The trustees responsible for the incorporated body." text="The Certificate of Incorporation records the duly appointed trustees of ONE VOIZE FRIENDS CLUB OF LAGOS."/>
         <div className="grid-auto">
           {trustees.map(([name,role,image])=><article key={name} style={{background:'var(--card)',padding:22,borderRadius:22,border:'1px solid var(--border)'}}><img src={image} alt={`${name}, ${role}`} style={{width:'100%',height:230,borderRadius:16,objectFit:'cover',objectPosition:'center'}}/><h3 className="serif" style={{fontSize:25,margin:'18px 0 4px'}}>{name}</h3><div className="eyebrow">{role}</div></article>)}
-        </div>
-      </div>
-    </section>
-
-    <section className="section" style={{background:'var(--surface)'}}>
-      <div className="container">
-        <SectionTitle eyebrow="Governing Body" title="A defined structure for administration and accountability."/>
-        <div className="grid-auto">
-          {governingBody.map((role,i)=><div key={role} style={{padding:22,border:'1px solid var(--border)',borderRadius:18,background:'var(--card)'}}><div className="eyebrow">0{i+1}</div><strong>{role}</strong></div>)}
         </div>
       </div>
     </section>
