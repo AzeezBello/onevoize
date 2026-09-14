@@ -12,6 +12,16 @@ const trustees = [
   ['Bariyi Fowora Shoniyi', 'Assistant General Secretary', '/images/trustee-portraits/bariyi-fowora-shoniyi.jpeg'],
 ];
 
+const clubMembers = [
+  ['Abdul Silvester SLY', '/images/members/abdul-silvester-sly.jpeg'],
+  ['Adeyeye Ibrahim', '/images/members/adeyeye-ibrahim.jpeg'],
+  ['Hakeem Babatunde Salami', '/images/members/hakeem-babatunde-salami.jpeg'],
+  ['Honorable Olalekan S. Davids (Salaqua)', '/images/members/olalekan-davids-salaqua.jpeg'],
+  ['Olatunde Isikalu', '/images/members/olatunde-isikalu.jpeg'],
+  ['Prince Afolabi Olanrewaju', '/images/members/prince-afolabi-olanrewaju.jpeg'],
+  ['Wasiu Adekunle Shoniyi', '/images/members/wasiu-adekunle-shoniyi.jpeg'],
+];
+
 export default function About() {
   return <>
     <div id="about-us"><PageHero eyebrow="About us" title="One organisation. One voice." text={siteConfig.description} action={{ label: 'Read our constitution', href: '/constitution' }}/></div>
@@ -56,6 +66,7 @@ export default function About() {
         <div className="grid-auto">
           {trustees.map(([name,role,image])=><article key={name} style={{background:'var(--card)',padding:22,borderRadius:22,border:'1px solid var(--border)'}}><img src={image} alt={`${name}, ${role}`} style={{width:'100%',height:230,borderRadius:16,objectFit:'cover',objectPosition:'center'}}/><h3 className="serif" style={{fontSize:25,margin:'18px 0 4px'}}>{name}</h3><div className="eyebrow">{role}</div></article>)}
         </div>
+        <div style={{marginTop:56}}><div className="eyebrow">Club Members</div><h2 className="serif" style={{fontSize:'clamp(34px,5vw,52px)',margin:'10px 0 30px'}}>The people who make the club.</h2><div className="grid-auto">{clubMembers.map(([name,image])=><article key={name} style={{background:'var(--card)',padding:18,borderRadius:20,border:'1px solid var(--border)'}}><img src={image} alt={`${name}, Global Voize Club member`} style={{width:'100%',height:240,borderRadius:14,objectFit:'cover'}}/><h3 className="serif" style={{fontSize:23,margin:'14px 0 0'}}>{name}</h3><div className="eyebrow" style={{marginTop:7}}>Member</div></article>)}</div></div>
       </div>
     </section>
 
