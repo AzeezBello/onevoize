@@ -3,10 +3,10 @@ export type Person = { name: string; role: string; image: string }
 /** Registered trustees / executive committee. Names and roles follow the captions supplied with the portraits. */
 export const trustees: Person[] = [
   { name: 'Olaiya Ibrahim Olatunbosun', role: 'President', image: '/images/trustee-portraits/olaiya-ibrahim-olatunbosun.jpg' },
+  { name: 'Awogbadebo Alabi Mobolaji', role: 'General Secretary', image: '/images/trustee-portraits/awogbadebo-alabi-mobolaji.jpg' },
+  { name: 'Sunday Olufemi Jeje', role: 'Financial Secretary', image: '/images/trustee-portraits/sunday-olufemi-jeje.jpg' },
   { name: 'Adebola Kabiru Adesanya', role: 'Public Relations Officer', image: '/images/trustee-portraits/adebola-kabiru-adesanya.jpg' },
   { name: 'Idowu Waleade Aseniyi', role: 'Social Secretary', image: '/images/trustee-portraits/idowu-waleade-aseniyi.jpg' },
-  { name: 'Sunday Olufemi Jeje', role: 'Financial Secretary', image: '/images/trustee-portraits/sunday-olufemi-jeje.jpg' },
-  { name: 'Awogbadebo Alabi Mobolaji', role: 'General Secretary', image: '/images/trustee-portraits/awogbadebo-alabi-mobolaji.jpg' },
   { name: 'Bariyi Fowora Shoniyi', role: 'Assistant Secretary', image: '/images/trustee-portraits/bariyi-fowora-shoniyi.jpg' },
 ]
 
