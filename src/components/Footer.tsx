@@ -1,11 +1,55 @@
-import Link from 'next/link';
-import { Mail, Share2, Globe2, Send } from 'lucide-react';
+import Image from 'next/image'
+import Link from 'next/link'
+import { Mail, Share2, Globe2, Send } from 'lucide-react'
+import { siteConfig } from '@/lib/site'
 
 const socialLinks = [
   { href: 'https://facebook.com', label: 'Facebook', icon: Share2 },
   { href: 'https://instagram.com', label: 'Instagram', icon: Globe2 },
   { href: 'https://youtube.com', label: 'YouTube', icon: Send },
-  { href: 'mailto:hello@onevoize.org', label: 'Email', icon: Mail },
+  { href: `mailto:${siteConfig.contactEmail}`, label: 'Email', icon: Mail },
 ]
 
-export function Footer(){return <footer style={{background:'#090d24',color:'#f4f6ff',padding:'64px 0 28px',marginTop:80}}><div className="container"><div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr',gap:40}} className="footer-grid"><div><img src="/images/ONE VOICE LOGO 1.png" alt="One Voize Friends Club of Lagos logo" style={{width:130,height:108,objectFit:'contain',background:'#fff',borderRadius:10}}/><p style={{color:'#c8d0ed',lineHeight:1.7,maxWidth:440}}>A not-for-profit and non-political organisation committed to integrity, mutual support, service to less privileged people, goodwill, unity, peace and progress.</p><div className="footer-socials" style={{display:'flex',gap:12,alignItems:'center',marginTop:20}}>{socialLinks.map(({href,label,icon:Icon}) => <a key={label} href={href} aria-label={label} target="_blank" rel="noreferrer" style={{width:36,height:36,borderRadius:'50%',border:'1px solid rgba(255,255,255,.25)',display:'grid',placeItems:'center',color:'#f4f6ff',background:'rgba(255,255,255,.04)'}}><Icon size={16}/></a>)}</div></div><div><strong>Explore</strong><div style={{display:'grid',gap:12,marginTop:18,color:'#c8d0ed'}}><Link href="/about">About</Link><Link href="/programs">Our Work</Link><Link href="/campaigns">Campaigns</Link><Link href="/events">Events</Link></div></div><div><strong>Get Involved</strong><div style={{display:'grid',gap:12,marginTop:18,color:'#c8d0ed'}}><Link href="/volunteer">Volunteer</Link><Link href="/events">Events</Link><Link href="/donate">Donate</Link><Link href="/contact">Contact</Link></div></div></div><div style={{borderTop:'1px solid rgba(255,255,255,.2)',marginTop:50,paddingTop:22,color:'#aeb7d3',fontSize:13,display:'flex',justifyContent:'space-between'}}><span>© 2026 ONE VOIZE FRIENDS CLUB OF LAGOS. CAC Registration No. 8534259.</span><span>Privacy · Terms</span></div></div><style>{`@media(max-width:800px){.footer-grid{grid-template-columns:1fr!important}.footer-socials{flex-wrap:wrap}}`}</style></footer>}
+export function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="container">
+        <div className="footer-grid">
+          <div>
+            <div className="footer-logo">
+              <Image src="/images/ONE VOICE LOGO 1.png" alt="One Voize Friends Club of Lagos logo" width={130} height={41} />
+            </div>
+            <p className="footer-text">{siteConfig.description}</p>
+            <div className="footer-socials">
+              {socialLinks.map(({ href, label, icon: Icon }) => (
+                <a key={label} href={href} aria-label={label} target="_blank" rel="noreferrer"><Icon size={16} /></a>
+              ))}
+            </div>
+          </div>
+          <div>
+            <strong>Explore</strong>
+            <div className="footer-links">
+              <Link href="/about">About</Link>
+              <Link href="/programs">Our Work</Link>
+              <Link href="/campaigns">Campaigns</Link>
+              <Link href="/events">Events</Link>
+            </div>
+          </div>
+          <div>
+            <strong>Get Involved</strong>
+            <div className="footer-links">
+              <Link href="/volunteer">Volunteer</Link>
+              <Link href="/gallery">Gallery</Link>
+              <Link href="/donate">Donate</Link>
+              <Link href="/contact">Contact</Link>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} {siteConfig.legalName}. CAC Registration No. {siteConfig.registrationNumber}.</span>
+          <span>Privacy · Terms</span>
+        </div>
+      </div>
+    </footer>
+  )
+}

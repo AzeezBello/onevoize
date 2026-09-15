@@ -35,11 +35,11 @@ function CompleteContent() {
 		})()
 	}, [gateway, reference, transactionId])
 
-	return <main className="section"><div className="container" style={{ maxWidth: 720, textAlign: 'center' }}>{state === 'loading' ? <><h1 className="serif">Confirming your donation…</h1><p className="muted">Please wait while we securely verify your payment.</p></> : state === 'success' ? <><div className="eyebrow">Thank you</div><h1 className="serif">Your donation was successful.</h1><p className="muted">Reference: <strong>{reference}</strong></p><Link className="btn btn-light" href="/">Return Home</Link></> : <><h1 className="serif">We could not confirm the payment.</h1><p className="muted">{error}</p><Link className="btn btn-primary" href="/donate">Try Again</Link></>}</div></main>
+	return <section className="section"><div className="container" style={{ maxWidth: 720, textAlign: 'center' }}>{state === 'loading' ? <><h1 className="serif">Confirming your donation…</h1><p className="muted">Please wait while we securely verify your payment.</p></> : state === 'success' ? <><div className="eyebrow">Thank you</div><h1 className="serif">Your donation was successful.</h1><p className="muted">Reference: <strong>{reference}</strong></p><Link className="btn btn-light" href="/">Return Home</Link></> : <><h1 className="serif">We could not confirm the payment.</h1><p className="muted">{error}</p><Link className="btn btn-primary" href="/donate">Try Again</Link></>}</div></section>
 }
 
 function LoadingState() {
-	return <main className="section"><div className="container" style={{ maxWidth: 720, textAlign: 'center' }}><h1 className="serif">Confirming your donation…</h1><p className="muted">Please wait while we securely verify your payment.</p></div></main>
+	return <section className="section"><div className="container" style={{ maxWidth: 720, textAlign: 'center' }}><h1 className="serif">Confirming your donation…</h1><p className="muted">Please wait while we securely verify your payment.</p></div></section>
 }
 
 export default function Complete() {

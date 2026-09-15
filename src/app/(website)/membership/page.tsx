@@ -5,7 +5,7 @@ import { PrintFormButton } from '@/components/PrintFormButton'
 
 export default function MembershipPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <div className="bg-background">
       {/* Hero */}
       <section className="border-b bg-muted/30">
         <div className="container mx-auto px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
@@ -70,6 +70,6 @@ export default function MembershipPage() {
           <MembershipForm />
         </div>
       </section>
-    </main>
+    </div>
   )
 }

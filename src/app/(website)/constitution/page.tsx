@@ -66,7 +66,7 @@ function Copy({ children }: { children: React.ReactNode }) {
 }
 
 function BulletList({ items }: { items: string[] }) {
-  return <ul style={{ margin: 0, paddingLeft: 22, color: 'var(--muted)', lineHeight: 1.8, fontSize: 17 }}>{items.map(item => <li key={item} style={{ marginBottom: 10 }}>{item}</li>)}</ul>
+  return <ul style={{ margin: 0, paddingLeft: 22, listStyle: 'disc', color: 'var(--muted)', lineHeight: 1.8, fontSize: 17 }}>{items.map(item => <li key={item} style={{ marginBottom: 10 }}>{item}</li>)}</ul>
 }
 
 export default function Constitution() {
@@ -80,7 +80,7 @@ export default function Constitution() {
       </div>
     </section>
 
-    <main className="section">
+    <div className="section">
       <div className="container" style={{ maxWidth: 1000 }}>
         <Article number="1" title="Name and Address">
           <Copy>The name of the organisation is <strong>GLOBAL VOIZE CLUB (GVC)</strong>.</Copy>
@@ -162,6 +162,6 @@ export default function Constitution() {
         </section>
         <div style={{ marginTop: 30 }}><Link href="/about" className="btn btn-light">Back to About</Link></div>
       </div>
-    </main>
+    </div>
   </>
 }

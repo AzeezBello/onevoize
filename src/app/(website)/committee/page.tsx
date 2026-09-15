@@ -7,8 +7,8 @@ const committees = [
 ]
 
 export default function Committee() {
-  return <main>
+  return <>
     <PageHero eyebrow="Club committee" title="Working groups that keep the club moving." text="Our committees turn the club's constitution and decisions into responsible action." />
     <section className="section"><div className="container"><div className="grid-auto">{committees.map(([title, description], index) => <article key={title} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 20, padding: 26 }}><div className="eyebrow">0{index + 1}</div><h2 className="serif" style={{ fontSize: 29 }}>{title}</h2><p style={{ color: 'var(--muted)', lineHeight: 1.7 }}>{description}</p></article>)}</div></div></section>
-  </main>
+  </>
 }
