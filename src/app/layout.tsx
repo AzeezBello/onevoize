@@ -26,14 +26,8 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     type: 'website',
     siteName: siteConfig.displayName,
-    images: [{ url: '/images/ONE VOICE FRONT PAGE.jpg', width: 1200, height: 533, alt: siteConfig.displayName }],
   },
   twitter: { card: 'summary_large_image', title: siteConfig.displayName, description: siteConfig.description },
-  icons: {
-    icon: '/images/ONE VOICE LOGO.png',
-    shortcut: '/images/ONE VOICE LOGO.png',
-    apple: '/images/ONE VOICE LOGO.png',
-  },
 };
 
 export const viewport: Viewport = {

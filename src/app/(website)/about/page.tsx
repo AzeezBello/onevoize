@@ -1,34 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { SectionTitle } from '@/components/SectionTitle';
-import { siteConfig } from '@/lib/site';
 import { PageHero } from '@/components/PageHero';
-
-const trustees = [
-  ['Olaiya Ibrahim Olatunbosun', 'President', '/images/trustee-portraits/olaiya-ibrahim.jpeg'],
-  ['Kabiru Adesanya', 'Public Relations Officer', '/images/trustee-portraits/kabiru-adesanya.jpeg'],
-  ['Waleade Idowu Aseniyi', 'Social Secretary', '/images/trustee-portraits/waleade-idowu.jpeg'],
-  ['Olufemi Jeje', 'Financial Secretary', '/images/trustee-portraits/olufemi-jeje.jpeg'],
-  ['Awogbadebo Alabi Mobolaji', 'General Secretary', '/images/trustee-portraits/awogbadebo-alabi.jpeg'],
-  ['Bariyi Fowora Shoniyi', 'Assistant General Secretary', '/images/trustee-portraits/bariyi-fowora-shoniyi.jpeg'],
-];
-
-const clubMembers = [
-  ['Abdul Silvester SLY', '/images/members/abdul-silvester-sly.jpeg'],
-  ['Adeyeye Ibrahim', '/images/members/adeyeye-ibrahim.jpeg'],
-  ['Hakeem Babatunde Salami', '/images/members/hakeem-babatunde-salami.jpeg'],
-  ['Honorable Olalekan S. Davids (Salaqua)', '/images/members/olalekan-davids-salaqua.jpeg'],
-  ['Olatunde Isikalu', '/images/members/olatunde-isikalu.jpeg'],
-  ['Prince Afolabi Olanrewaju', '/images/members/prince-afolabi-olanrewaju.jpeg'],
-  ['Wasiu Adekunle Shoniyi', '/images/members/wasiu-adekunle-shoniyi.jpeg'],
-];
-
-const clubPhotos = [
-  ['/images/club/members-at-event.jpeg', 'Members at a club event'],
-  ['/images/club/club-celebration.jpeg', 'Club celebration'],
-  ['/images/club/members-group.jpeg', 'Members together'],
-  ['/images/club/club-leaders.jpeg', 'Club leaders'],
-];
+import { PeopleGrid } from '@/components/PersonCard';
+import { siteConfig } from '@/lib/site';
+import { trustees, members } from '@/lib/people';
+import { clubPhotos } from '@/lib/gallery';
 
 const cardStyle = { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 22, padding: 22 } as const;
 
@@ -68,10 +45,11 @@ export default function About() {
     <section id="exco-members" className="section">
       <div className="container">
         <SectionTitle eyebrow="Registered Trustees" title="The trustees responsible for the incorporated body." text="The Certificate of Incorporation records the duly appointed trustees of ONE VOIZE FRIENDS CLUB OF LAGOS."/>
-        <div className="grid-auto">
-          {trustees.map(([name,role,image])=><article key={name} style={cardStyle}><div className="portrait" style={{height:230}}><Image src={image} alt={`${name}, ${role}`} fill sizes="(max-width: 640px) 100vw, 300px"/></div><h3 className="serif" style={{fontSize:25,margin:'18px 0 4px'}}>{name}</h3><div className="eyebrow">{role}</div></article>)}
+        <PeopleGrid people={trustees}/>
+        <div style={{marginTop:64}}>
+          <SectionTitle eyebrow="Club Members" title="The people who make the club."/>
+          <PeopleGrid people={members}/>
         </div>
-        <div style={{marginTop:56}}><div className="eyebrow">Club Members</div><h2 className="serif" style={{fontSize:'clamp(34px,5vw,52px)',margin:'10px 0 30px'}}>The people who make the club.</h2><div className="grid-auto">{clubMembers.map(([name,image])=><article key={name} style={{...cardStyle,padding:18,borderRadius:20}}><div className="portrait" style={{height:240,borderRadius:14}}><Image src={image} alt={`${name}, Global Voize Club member`} fill sizes="(max-width: 640px) 100vw, 300px"/></div><h3 className="serif" style={{fontSize:23,margin:'14px 0 0'}}>{name}</h3><div className="eyebrow" style={{marginTop:7}}>Member</div></article>)}</div></div>
       </div>
     </section>
 
