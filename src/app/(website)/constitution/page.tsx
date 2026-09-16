@@ -34,8 +34,8 @@ const loanRules = [
 const offices = [
   ['Club President', 'Sets the standard for member behaviour and club culture; oversees the mission and vision; mediates disputes; and works with executives on budgets and activities.'],
   ['Vice President', "Supports the President's decisions and directives; assumes the President's duties in their absence; communicates with members; and collaborates on club growth and sustainability."],
-  ['Secretary', 'Records accurate minutes and key discussions; liaises with external organisations, stakeholders and partners; prepares meeting agendas with the President; and ensures the club follows its bylaws and policies.'],
-  ['Treasurer', "Prepares the annual budget; tracks income and expenses; maintains accurate financial records; presents regular financial updates; and keeps important documents in compliance with legal requirements."],
+  ['General Secretary', 'Records accurate minutes and key discussions; liaises with external organisations, stakeholders and partners; prepares meeting agendas with the President; and ensures the club follows its bylaws and policies.'],
+  ['Financial Secretary', "Prepares the annual budget; tracks income and expenses; maintains accurate financial records; presents regular financial updates; and keeps important documents in compliance with legal requirements."],
   ['Provost', 'Ensures members follow the club rules, bylaws and code of conduct during meetings, and upholds the ethical standards of the club.'],
   ['Public Relations Officer', 'Keeps members informed through email, social media and other channels; promotes club events; and establishes partnerships that support the club\'s goals.'],
   ['Social Secretary', 'Plans and manages parties, fundraisers, outings and other events; ensures they align with club values; manages event budgets; liaises with vendors; and maintains event records, attendance and feedback.'],

@@ -48,7 +48,7 @@ export default function About() {
       </div>
     </section>
 
-    <section id="exco-members" className="section">
+    {/* <section id="exco-members" className="section">
       <div className="container">
         <SectionTitle eyebrow="Registered Trustees" title="The trustees responsible for the incorporated body." text="The Certificate of Incorporation records the duly appointed trustees of ONE VOIZE FRIENDS CLUB OF LAGOS."/>
         <PeopleGrid people={trustees}/>
@@ -57,7 +57,7 @@ export default function About() {
           <PeopleGrid people={members}/>
         </div>
       </div>
-    </section>
+    </section> */}
 
 
     <section id="club-committee" className="section">

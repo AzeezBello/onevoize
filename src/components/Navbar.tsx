@@ -38,7 +38,7 @@ export function Navbar() {
             <summary className={`nav-link ${isActive('/about') ? 'active' : ''}`}>About us</summary>
             <div className="nav-dropdown-menu">
               <Link href="/about#about-us">About us</Link>
-              <Link href="/about#exco-members">Exco / members</Link>
+              <Link href="/exco">Exco / members</Link>
               <Link href="/about#club-committee">Club committee</Link>
             </div>
           </details>
