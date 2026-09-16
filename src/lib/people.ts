@@ -14,12 +14,12 @@ export const trustees: Person[] = [
 export const featuredTrustees = trustees.slice(0, 3)
 
 export const members: Person[] = [
+  { name: 'Hon. Olalekan S. Davids (Salaqua)', role: 'Disciplinary Committee Member', image: '/images/members/olalekan-davids-salaqua.jpg' },
   { name: 'Hon. Abdul Silvester Sly', role: 'Disciplinary Committee Member', image: '/images/members/abdul-silvester-sly.jpg' },
+  { name: 'Hon. Prince Afolabi Olanrewaju', role: 'Disciplinary Committee Member', image: '/images/members/prince-afolabi-olanrewaju.jpg' },
   { name: 'Hon. Prince Adeyeye Ibrahim', role: 'Member', image: '/images/members/adeyeye-ibrahim.jpg' },
   { name: 'Hon. Hakeem Babatunde Salami', role: 'Member', image: '/images/members/hakeem-babatunde-salami.jpg' },
-  { name: 'Hon. Olalekan S. Davids (Salaqua)', role: 'Disciplinary Committee Member', image: '/images/members/olalekan-davids-salaqua.jpg' },
   { name: 'Hon. Olatunde Isikalu', role: 'Member', image: '/images/members/olatunde-isikalu.jpg' },
-  { name: 'Hon. Prince Afolabi Olanrewaju', role: 'Disciplinary Committee Member', image: '/images/members/prince-afolabi-olanrewaju.jpg' },
   { name: 'Hon. Wasiu Adekunle Shoniyi', role: 'Member', image: '/images/members/wasiu-adekunle-shoniyi.jpg' },
 ]
 
