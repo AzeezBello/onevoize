@@ -8,6 +8,12 @@ import { trustees, members } from '@/lib/people';
 import { clubPhotos } from '@/lib/gallery';
 
 const cardStyle = { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 22, padding: 22 } as const;
+const committees = [
+  ['Disciplinary Committee', 'Promotes good conduct, investigates complaints, conducts hearings and recommends fair resolutions.'],
+  ['Finance and Audit Committee', 'Supports transparent budgeting, financial records, contributions and periodic review.'],
+  ['Events and Social Committee', 'Plans outings, celebrations, fundraisers and member activities in line with club values.'],
+  ['Welfare and Charity Committee', 'Coordinates support for members and charitable giving to less privileged people in Africa.'],
+]
 
 export default function About() {
   return <>
@@ -53,7 +59,19 @@ export default function About() {
       </div>
     </section>
 
+
     <section id="club-committee" className="section">
+      <div className="container">
+        <div className="grid-auto">{committees.map(([title, description], index) => <article key={title} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 20, padding: 26 }}>
+          <div className="eyebrow">0{index + 1}</div>
+          <h2 className="serif" style={{ fontSize: 29 }}>{title}</h2>
+          <p style={{ color: 'var(--muted)', lineHeight: 1.7 }}>{description}</p></article>)}
+        </div>
+      </div>
+    </section>
+    
+    
+    <section className="section">
       <div className="container two-col two-col-tight">
         <div style={{...cardStyle,padding:28}}>
           <div className="eyebrow">Registration</div><h2 className="serif" style={{fontSize:32,margin:'8px 0 12px'}}>Corporate Affairs Commission</h2>

@@ -2,6 +2,7 @@ export type GalleryPhoto = [src: string, alt: string]
 export type GalleryVideo = { src: string; title: string; caption: string }
 
 export const clubPhotos: GalleryPhoto[] = [
+  ['/images/club/gvc-at-mother-less-home-in-surulere.jpeg', 'Gvc at mother less home in surulere for Charity Donation towards our first year anniversary'],
   ['/images/club/members-at-event.jpeg', 'Three club members in white polo shirts on a green carpet in front of the Global Voize anniversary banner'],
   ['/images/club/club-celebration.jpeg', 'A club member wearing a blue club sash and traditional cap among guests dressed in white lace at a celebration'],
   ['/images/club/members-group.jpeg', 'Club members in matching white polo shirts lined up outside a care centre during an outreach visit'],

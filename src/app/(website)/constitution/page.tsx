@@ -111,7 +111,7 @@ export default function Constitution() {
 
         <Article number="4" title="Governance and Club Structure">
           <Copy>The Executive Committee shall consist of:</Copy>
-          <BulletList items={['Club President', 'Vice President', 'Secretary', 'Treasurer', 'Provost / Public Relations Officer', 'Social Secretary', 'Disciplinary Committee']} />
+          <BulletList items={['Club President', 'Vice President', 'Secretary', 'Asst. Secretary','Financial Secretary', 'Provost / Public Relations Officer', 'Social Secretary', 'Disciplinary Committee']} />
           <h3 className="serif" style={{ fontSize: 30, margin: '38px 0 18px' }}>Roles and responsibilities</h3>
           <div style={{ display: 'grid', gap: 14 }}>{offices.map(([office, responsibility]) => <div key={office} style={{ padding: 20, border: '1px solid var(--border)', borderRadius: 14 }}><strong>{office}</strong><p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: '8px 0 0' }}>{responsibility}</p></div>)}</div>
           <div style={{ marginTop: 30 }}>
