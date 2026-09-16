@@ -7,8 +7,8 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 
 const links = [
   ['Home', '/'],
-  ['About us', '/about#about-us'],
-  ['Exco / members', '/about#exco-members'],
+  ['About us', '/about'],
+  ['Exco / members', '/exco'],
   ['Club committee', '/about#club-committee'],
   ['Gallery / past events / videos', '/gallery'],
   ['Join us', '/membership'],
