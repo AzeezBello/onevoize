@@ -10,7 +10,6 @@ const amounts = [5000, 10000, 25000, 50000]
 export default function DonationForm({ campaignId }: { campaignId?: string }) {
   const [amount, setAmount] = useState(10000)
   const [custom, setCustom] = useState('')
-  const [gateway, setGateway] = useState<'paystack' | 'flutterwave'>('paystack')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [anonymous, setAnonymous] = useState(false)
@@ -27,7 +26,7 @@ export default function DonationForm({ campaignId }: { campaignId?: string }) {
 
     setLoading(true)
     try {
-      const response = await fetch(`/api/payments/${gateway}/initialize`, {
+      const response = await fetch('/api/payments/paystack/initialize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: value, name: name.trim(), email: email.trim(), campaignId, isAnonymous: anonymous, donationType: 'one_time' }),
@@ -46,7 +45,6 @@ export default function DonationForm({ campaignId }: { campaignId?: string }) {
     <label className="sr-only" htmlFor="custom-amount">Custom amount</label><input id="custom-amount" value={custom} onChange={event => setCustom(event.target.value.replace(/[^0-9]/g, ''))} placeholder="Custom amount" inputMode="numeric"/>
     <label className="sr-only" htmlFor="donor-name">Full name</label><input id="donor-name" required minLength={2} value={name} onChange={event => setName(event.target.value)} placeholder="Full name"/>
     <label className="sr-only" htmlFor="donor-email">Email address</label><input id="donor-email" required type="email" value={email} onChange={event => setEmail(event.target.value)} placeholder="Email address"/>
-    <label className="sr-only" htmlFor="payment-gateway">Payment gateway</label><select id="payment-gateway" value={gateway} onChange={event => setGateway(event.target.value as 'paystack' | 'flutterwave')}><option value="paystack">Pay with Paystack</option><option value="flutterwave">Pay with Flutterwave</option></select>
     <label className="check"><input type="checkbox" checked={anonymous} onChange={event => setAnonymous(event.target.checked)}/> Make my donation anonymous</label>
     {error && <p role="alert" style={{ color: '#b42318', margin: 0 }}>{error}</p>}
     <Button className="btn btn-primary" type="submit" disabled={loading} style={{ border: 0, cursor: loading ? 'wait' : 'pointer' }}>{loading ? <><Loader2 className="spin" size={17}/> Starting payment…</> : 'Continue to payment'}</Button>

@@ -1,6 +1,6 @@
 # ONE VOIZE FRIENDS CLUB OF LAGOS
 
-A public NGO website built with Next.js, TypeScript, Tailwind CSS, Paystack, Flutterwave, and Vercel.
+A public NGO website built with Next.js, TypeScript, Tailwind CSS, Paystack, and Vercel.
 
 ## Organization identity
 
@@ -19,9 +19,8 @@ The registered identity and constitution-derived organisation details are reflec
 - Gallery, events and membership form
 - Volunteer and contact flows
 - One-time Paystack donations
-- One-time Flutterwave donations
 - Server-side transaction verification
-- Paystack and Flutterwave webhook verification
+- Paystack webhook verification
 - Automatic campaign fundraising totals
 - Mailto-based membership, volunteer and contact forms
 - Constitution-derived organisation identity and governance seed data
@@ -33,8 +32,6 @@ Copy `.env.example` to `.env.local`:
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 PAYSTACK_SECRET_KEY=
-FLUTTERWAVE_SECRET_KEY=
-FLUTTERWAVE_SECRET_HASH=
 ```
 
 ## Run locally
@@ -53,7 +50,7 @@ npm start
 
 ## Deploy to Vercel
 
-Add the payment and site URL environment variables to the Vercel project. Configure Paystack and Flutterwave webhooks to point to the corresponding `/api/payments/.../webhook` routes in the deployed application.
+Add the payment and site URL environment variables to the Vercel project. Configure the Paystack webhook to point to the `/api/payments/paystack/webhook` route in the deployed application.
 
 ## Content
 
