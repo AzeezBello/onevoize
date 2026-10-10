@@ -6,7 +6,7 @@ const objectives = [
   'Uplift ourselves and support each other.',
   'Give to less privileged people in Africa.',
   'Ensure Global Voize members are ambassadors wherever they are invited.',
-  'Ensure Global Voize members leave every outing with a convoy.',
+  'Global Voize members shall leave every outing in a convoy.',
 ]
 
 const membershipRules = [
@@ -17,13 +17,25 @@ const membershipRules = [
   'New members must be well known to at least one existing member, and the club shall admit no more than two new members yearly.',
 ]
 
+const governancePositions = [
+  'Club President',
+  'Vice President',
+  'Secretary',
+  'Assistant Secretary',
+  'Treasurer',
+  'Provost',
+  'Public Relations Officer',
+  'Social Secretary',
+  'Disciplinary Committee',
+]
+
 const loanRules = [
   ['Membership', 'Only active, long-standing members are typically eligible for loans. This ensures that a loan is granted to someone who has demonstrated commitment to the club.'],
   ['Purpose of loan', "A loan may be granted for a specific purpose that benefits a member, such as an emergency, education, or a small business initiative. The purpose should align with the club's values."],
   ['Loan amount', "The loan amount may be limited based on the member's contributions and the club's available financial resources."],
   ['Repayment terms', 'The loan agreement shall state the repayment schedule, interest if any, and penalties for missed payments.'],
   ['Interest rates', 'If interest is charged, it shall be reasonable and reflect the financial status of the club and the purpose of the loan. Interest may not always be charged.'],
-  ['Collateral or guarantee', 'Fifty per cent of members must provide collateral or guarantee for the borrower.'],
+  ['Collateral or guarantee', 'At least 50 per cent of members must provide collateral or a guarantee for the borrower.'],
   ['Approval process', 'Loan approval may require a vote by members or a review by a loan committee to ensure transparency and fairness.'],
   ['Loan term limits', 'A loan may have a maximum duration, such as 12 or 24 months, after which the borrower must repay the full amount.'],
   ['Good standing', 'The member seeking a loan must be in good standing, with no outstanding dues or disciplinary action.'],
@@ -34,8 +46,9 @@ const loanRules = [
 const offices = [
   ['Club President', 'Sets the standard for member behaviour and club culture; oversees the mission and vision; mediates disputes; and works with executives on budgets and activities.'],
   ['Vice President', "Supports the President's decisions and directives; assumes the President's duties in their absence; communicates with members; and collaborates on club growth and sustainability."],
-  ['General Secretary', 'Records accurate minutes and key discussions; liaises with external organisations, stakeholders and partners; prepares meeting agendas with the President; and ensures the club follows its bylaws and policies.'],
-  ['Financial Secretary', "Prepares the annual budget; tracks income and expenses; maintains accurate financial records; presents regular financial updates; and keeps important documents in compliance with legal requirements."],
+  ['Secretary', 'Attends meetings and records accurate minutes and key discussions; liaises with external organisations, stakeholders and partners; prepares meeting agendas with the President; and ensures the club follows its bylaws and policies.'],
+  ['Assistant Secretary', "Supports the Secretary and carries out the Secretary's duties when the Secretary is unavailable."],
+  ['Treasurer', "Prepares the annual budget with the officers and members; tracks income and expenses; maintains accurate financial records; presents regular financial updates; and keeps important club documents."],
   ['Provost', 'Ensures members follow the club rules, bylaws and code of conduct during meetings, and upholds the ethical standards of the club.'],
   ['Public Relations Officer', 'Keeps members informed through email, social media and other channels; promotes club events; and establishes partnerships that support the club\'s goals.'],
   ['Social Secretary', 'Plans and manages parties, fundraisers, outings and other events; ensures they align with club values; manages event budgets; liaises with vendors; and maintains event records, attendance and feedback.'],
@@ -45,7 +58,7 @@ const offices = [
 const conductRules = [
   'Members shall uphold the ethical standards and values of the club.',
   'Any member who misbehaves at a club outing or at an outing to which the club was not invited shall be fined 100,000 Naira through the Disciplinary Committee.',
-  'A member who misuses the club platform with unwanted posts shall be fined 10,000 Naira.',
+  'A member who misuses the club platform by posting unwanted content shall be fined 10,000 Naira.',
   'All members must wear the club uniform, cap and mofila at all social outings.',
 ]
 
@@ -97,9 +110,9 @@ export default function Constitution() {
           <div style={{ marginTop: 30, padding: 24, background: 'var(--surface)', borderRadius: 18 }}>
             <h3 className="serif" style={{ fontSize: 28, margin: '0 0 14px' }}>Dues and fees</h3>
             <BulletList items={[
-              'One million Naira monthly contribution (Ajo), for members who can participate.',
-              'A mandatory contribution of 50,000 Naira for all members, used towards charity and less privileged people in Africa.',
-              'A new member must pay a non-refundable registration fee of one million Naira.',
+              'A monthly contribution of 1,000,000 Naira (Ajo) for members who choose to participate.',
+              'A mandatory monthly contribution of 50,000 Naira for all members, used towards charity and less privileged people in Africa.',
+              'A new member must pay a non-refundable annual registration fee of 1,000,000 Naira.',
               'Termination and new membership shall be conducted and screened through the appointed Disciplinary Committee.',
             ]} />
           </div>
@@ -111,25 +124,25 @@ export default function Constitution() {
 
         <Article number="4" title="Governance and Club Structure">
           <Copy>The Executive Committee shall consist of:</Copy>
-          <BulletList items={['Club President', 'Vice President', 'Secretary', 'Asst. Secretary','Financial Secretary', 'Provost / Public Relations Officer', 'Social Secretary', 'Disciplinary Committee']} />
+          <BulletList items={governancePositions} />
           <h3 className="serif" style={{ fontSize: 30, margin: '38px 0 18px' }}>Roles and responsibilities</h3>
           <div style={{ display: 'grid', gap: 14 }}>{offices.map(([office, responsibility]) => <div key={office} style={{ padding: 20, border: '1px solid var(--border)', borderRadius: 14 }}><strong>{office}</strong><p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: '8px 0 0' }}>{responsibility}</p></div>)}</div>
           <div style={{ marginTop: 30 }}>
-            <Copy><strong>Election of officers:</strong> The club shall state the process for electing officers, including eligibility, nominations and voting.</Copy>
+            <Copy><strong>Election of officers:</strong> Regular members in good standing may vote and stand for election. Nominations shall be submitted before the election. Officers shall be elected by secret ballot, and the candidate receiving the most votes for an office shall be elected.</Copy>
             <Copy><strong>Terms of office:</strong> Officers shall serve for a term of four years.</Copy>
           </div>
         </Article>
 
         <Article number="5" title="General Meetings">
           <BulletList items={[
-            'General meetings shall be held every Sunday at 8:00 p.m. UK and Nigeria time, and 12:00 noon in America and Canada.',
+            'General meetings shall be held every two weeks on Sunday at 8:00 p.m. UK and Nigeria time, and 12:00 noon in America and Canada.',
             'The quorum required to commence a meeting is eight members.',
-            'The club shall describe and follow its voting process.',
+            'Each regular member may cast one vote. Decisions shall be made by a majority of votes cast unless this constitution specifies a different threshold.',
             'The Public Relations Officer shall notify all members of meetings.',
             'A member absent from a general meeting twice without reason shall pay a 20,000 Naira fine before the next meeting.',
             'A member who will be absent shall inform the Secretary or President at least two hours before the general meeting.',
-            'Lateness shall attract a fine of 5,000 Naira.',
-            'Posting an unauthorised post on the club platform shall attract a fine of 20,000 Naira.',
+            'Lateness shall attract a fine of 10,000 Naira.',
+            'Posting on the club platform without authorisation shall attract a fine of 20,000 Naira. This is separate from the 10,000 Naira fine for unwanted content under the Code of Conduct.',
           ]} />
         </Article>
 
@@ -138,18 +151,19 @@ export default function Constitution() {
             'All club expenses and contributions must be included in the meeting agenda.',
             'All members shall be aware of every expense and the total amount held by the club.',
             'The outing contribution for a member\'s party shall be 100,000 Naira.',
-            'A member shall be entitled to one direct outing, not extended family, and the outing contribution must be handed over one week before the occasion.',
+            'A member shall be entitled to contributions for two outings. Emergency outings may be considered, but extended-family outings are not covered. The outing contribution must be handed over one week before the occasion.',
+            'The Club Secretary must receive an official invitation to a member\'s party at least one month before the event.',
           ]} />
         </Article>
 
         <Article number="7" title="Audit and Dissolution">
-          <Copy><strong>Audit:</strong> The club shall state if and when financial audits are required.</Copy>
-          <Copy><strong>Dissolution:</strong> The club shall outline what will happen to its assets in the case of dissolution.</Copy>
+          <Copy><strong>Audit:</strong> The club’s accounts shall be independently audited annually. The Treasurer shall make the financial records available for the audit and present the findings to members.</Copy>
+          <Copy><strong>Dissolution:</strong> After outstanding liabilities have been settled, the club’s remaining assets shall not be distributed among members. They shall be transferred to one or more not-for-profit organisations with similar charitable or community objectives, in accordance with applicable law.</Copy>
         </Article>
 
         <Article number="8" title="Amendments">
-          <Copy><strong>Amendment:</strong> The club shall outline the process for proposing amendments to this constitution.</Copy>
-          <Copy><strong>Approval of amendment:</strong> Amendments shall be approved through the stated voting process, requiring a two-thirds vote or the required majority.</Copy>
+          <Copy><strong>Proposal:</strong> A proposed amendment shall be submitted in writing to the Secretary and included in the notice of the general meeting at which it will be considered.</Copy>
+          <Copy><strong>Approval:</strong> An amendment shall require the approval of at least two-thirds of the votes cast by regular members present at a general meeting with quorum.</Copy>
         </Article>
 
         <Article number="9" title="Code of Conduct">
