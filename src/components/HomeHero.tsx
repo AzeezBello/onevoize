@@ -1,35 +1,29 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import type { CSSProperties } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { Button } from '@/components/ui/button'
+import { tapScale, springConfig } from '@/lib/motion'
 
 type HeroAction = { label: string; href: string }
 
 export type HomeHeroProps = {
-  /** Small uppercase line above the title */
   eyebrow?: string
-  /** First line of the title, rendered in white */
   title: string
-  /** Second line of the title, rendered in the highlight colour */
   titleHighlight?: string
-  /** Supporting paragraph */
   text?: string
-  /** Frosted-glass badge, e.g. "Since 2025" */
   badgeText?: string
   badgeSubtext?: string
   primaryAction?: HeroAction
   secondaryAction?: HeroAction
-  /** Path to the globe image (transparent PNG works best) */
   globeSrc?: string
-  /** Seconds for one full 360° turn of the globe */
   rotationDuration?: number
-  /** Turn the rotation off entirely */
   rotate?: boolean
-  /** Any CSS colour; defaults to the site gold */
   highlightColor?: string
-  /** Any CSS background; defaults to the deep blue gradient */
   background?: string
-  /** Short keywords shown along the bottom edge */
   keywords?: string[]
   scrollLabel?: string
   className?: string
@@ -53,6 +47,8 @@ export function HomeHero({
   scrollLabel,
   className = '',
 }: HomeHeroProps) {
+  const shouldReduce = useReducedMotion()
+
   const style = {
     '--globe-duration': `${rotationDuration}s`,
     ...(highlightColor ? { '--hero-highlight': highlightColor } : {}),
@@ -67,43 +63,86 @@ export function HomeHero({
 
       <div className="container home-hero-inner">
         <div className="home-hero-copy">
-          {eyebrow && <div className="home-hero-eyebrow">{eyebrow}</div>}
+          {eyebrow && (
+            <motion.div
+              initial={shouldReduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springConfig.smooth, delay: 0.05 }}
+              className="home-hero-eyebrow"
+            >
+              {eyebrow}
+            </motion.div>
+          )}
 
-          <h1 className="home-hero-title serif">
+          <motion.h1
+            initial={shouldReduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...springConfig.smooth, delay: 0.1 }}
+            className="home-hero-title serif"
+          >
             <span className="home-hero-title-white">{title}</span>
             {titleHighlight && <span className="home-hero-title-gold">{titleHighlight}</span>}
-          </h1>
+          </motion.h1>
 
-          {text && <p className="home-hero-text">{text}</p>}
+          {text && (
+            <motion.p
+              initial={shouldReduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springConfig.smooth, delay: 0.15 }}
+              className="home-hero-text"
+            >
+              {text}
+            </motion.p>
+          )}
 
           {(badgeText || badgeSubtext) && (
-            <div className="home-hero-badge">
+            <motion.div
+              initial={shouldReduce ? false : { opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ ...springConfig.smooth, delay: 0.2 }}
+              className="home-hero-badge"
+            >
               <div className="home-hero-badge-dot" />
               <div className="home-hero-badge-content">
                 {badgeText && <div className="home-hero-badge-label">{badgeText}</div>}
                 {badgeSubtext && <div className="home-hero-badge-subtext">{badgeSubtext}</div>}
               </div>
-            </div>
+            </motion.div>
           )}
 
           {(primaryAction || secondaryAction) && (
-            <div className="home-hero-actions">
+            <motion.div
+              initial={shouldReduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springConfig.smooth, delay: 0.25 }}
+              className="home-hero-actions"
+            >
               {primaryAction && (
-                <Link href={primaryAction.href} className="btn btn-gold">
-                  {primaryAction.label}
-                  <ArrowRight size={17} />
-                </Link>
+                <motion.div whileHover={shouldReduce ? {} : { scale: 1.02 }} whileTap={shouldReduce ? {} : tapScale}>
+                  <Link href={primaryAction.href} className="btn btn-gold">
+                    {primaryAction.label}
+                    <ArrowRight size={17} />
+                  </Link>
+                </motion.div>
               )}
               {secondaryAction && (
-                <Link href={secondaryAction.href} className="btn btn-ghost">
-                  {secondaryAction.label}
-                </Link>
+                <motion.div whileHover={shouldReduce ? {} : { scale: 1.02 }} whileTap={shouldReduce ? {} : tapScale}>
+                  <Link href={secondaryAction.href} className="btn btn-ghost">
+                    {secondaryAction.label}
+                  </Link>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
           )}
         </div>
 
-        <div className="home-hero-visual" aria-hidden="true">
+        <motion.div
+          initial={shouldReduce ? false : { opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ ...springConfig.smooth, delay: 0.18 }}
+          className="home-hero-visual"
+          aria-hidden="true"
+        >
           <div className="home-hero-aura" />
           <div className="home-hero-orbit" />
           <div className="home-hero-globe">
@@ -116,7 +155,7 @@ export function HomeHero({
               sizes="(max-width: 640px) 70vw, (max-width: 900px) 360px, 560px"
             />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {showFooter && (

@@ -1,5 +1,16 @@
 import { db } from '@/lib/db';
 import { Heart, Download } from 'lucide-react';
+import { FilterTabs } from '@/components/dashboard/FilterTabs';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
 
 function fmt(n: number) {
   return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(n);
@@ -36,10 +47,10 @@ async function getSummary() {
   return rows[0];
 }
 
-const statusColors: Record<string, string> = {
-  success: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-  pending: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-  failed:  'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+const statusBadgeClasses: Record<string, string> = {
+  success: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
+  pending: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+  failed:  'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800',
 };
 
 export default async function DonationsPage({
@@ -48,98 +59,120 @@ export default async function DonationsPage({
   searchParams: Promise<{ status?: string }>;
 }) {
   const { status } = await searchParams;
+  const activeStatus = status || '';
   const [donations, summary] = await Promise.all([getDonations(status), getSummary()]);
+
+  const tabs = [
+    { label: 'All Donations', value: '' },
+    { label: 'Success',       value: 'success' },
+    { label: 'Pending',       value: 'pending' },
+    { label: 'Failed',        value: 'failed' },
+  ];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[--foreground] flex items-center gap-2">
-            <Heart size={20} className="text-[--primary]" />
-            Donations
+          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <Heart size={20} className="text-primary" />
+            Donations Management
           </h2>
-          <p className="text-sm text-[--muted]">Track and manage all donation records</p>
+          <p className="text-sm text-muted-foreground">
+            Audit and inspect Paystack transactions recorded in Neon DB.
+          </p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg border border-[--border] px-4 py-2 text-sm text-[--foreground] hover:bg-[--accent] transition-colors">
-          <Download size={15} />
+        <Button variant="outline" size="sm" className="gap-2 self-start sm:self-auto">
+          <Download size={14} />
           Export CSV
-        </button>
+        </Button>
       </div>
 
-      {/* Summary */}
+      {/* Summary metric cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Total Raised', value: fmt(Number(summary.total)),       color: 'text-emerald-600 dark:text-emerald-400' },
-          { label: 'Successful',   value: String(summary.successful ?? 0),  color: 'text-emerald-600 dark:text-emerald-400' },
-          { label: 'Pending',      value: String(summary.pending ?? 0),     color: 'text-yellow-600 dark:text-yellow-400' },
-          { label: 'Failed',       value: String(summary.failed ?? 0),      color: 'text-red-600 dark:text-red-400' },
+          { label: 'Total Raised', value: fmt(Number(summary.total)),      color: 'text-emerald-600 dark:text-emerald-400' },
+          { label: 'Successful',   value: String(summary.successful ?? 0), color: 'text-emerald-600 dark:text-emerald-400' },
+          { label: 'Pending',      value: String(summary.pending ?? 0),    color: 'text-amber-600 dark:text-amber-400' },
+          { label: 'Failed',       value: String(summary.failed ?? 0),     color: 'text-rose-600 dark:text-rose-400' },
         ].map(s => (
-          <div key={s.label} className="rounded-lg border border-[--border] bg-[--card] p-4">
-            <p className="text-xs text-[--muted] uppercase tracking-wider">{s.label}</p>
-            <p className={`text-lg font-bold mt-1 ${s.color}`}>{s.value}</p>
-          </div>
+          <Card key={s.label} className="border border-border/80 shadow-none">
+            <CardContent className="p-4">
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{s.label}</p>
+              <p className={`text-xl font-bold mt-1 tabular-nums ${s.color}`}>{s.value}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-2 flex-wrap">
-        {[
-          { label: 'All',       value: '' },
-          { label: 'Success',   value: 'success' },
-          { label: 'Pending',   value: 'pending' },
-          { label: 'Failed',    value: 'failed' },
-        ].map(f => (
-          <a
-            key={f.value}
-            href={f.value ? `?status=${f.value}` : '/dashboard/donations'}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              (status || '') === f.value
-                ? 'bg-[--primary] text-[--primary-foreground]'
-                : 'border border-[--border] text-[--muted] hover:bg-[--accent]'
-            }`}
-          >
-            {f.label}
-          </a>
-        ))}
+      {/* Interactive Emil Kowalski sliding pill tabs */}
+      <div>
+        <FilterTabs
+          tabs={tabs}
+          activeValue={activeStatus}
+          baseUrl="/dashboard/donations"
+          layoutId="donations-filter-pill"
+        />
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-[--border] bg-[--card] overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[--muted-surface]">
-              <tr>
-                {['Reference', 'Donor', 'Email', 'Amount', 'Status', 'Campaign', 'Channel', 'Date'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-medium text-[--muted] uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[--border]">
-              {donations.length === 0 && (
-                <tr><td colSpan={8} className="px-4 py-12 text-center text-[--muted]">No donations found.</td></tr>
+      <Card className="border border-border/80 shadow-none overflow-hidden">
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Reference</TableHead>
+                <TableHead>Donor</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Campaign</TableHead>
+                <TableHead>Channel</TableHead>
+                <TableHead className="text-right">Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {donations.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="py-12 text-center text-muted-foreground text-sm">
+                    No donations found matching this filter.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                donations.map(d => (
+                  <TableRow key={d.id} className="transition-colors">
+                    <TableCell className="font-mono text-xs text-muted-foreground py-3.5">
+                      {d.reference.slice(0, 12)}…
+                    </TableCell>
+                    <TableCell className="font-medium text-foreground py-3.5">
+                      {d.donor_name}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-xs py-3.5">
+                      {d.donor_email}
+                    </TableCell>
+                    <TableCell className="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums py-3.5">
+                      {fmt(Number(d.amount))}
+                    </TableCell>
+                    <TableCell className="py-3.5">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border capitalize ${statusBadgeClasses[d.status] || ''}`}>
+                        {d.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-xs py-3.5">
+                      {d.campaign || '—'}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-xs capitalize py-3.5">
+                      {d.channel || '—'}
+                    </TableCell>
+                    <TableCell className="text-right text-muted-foreground text-xs tabular-nums py-3.5">
+                      {d.paid_at ? new Date(d.paid_at).toLocaleDateString('en-NG') : new Date(d.created_at).toLocaleDateString('en-NG')}
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
-              {donations.map(d => (
-                <tr key={d.id} className="hover:bg-[--accent]/30 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-[--muted]">{d.reference.slice(0, 12)}…</td>
-                  <td className="px-4 py-3 font-medium text-[--foreground]">{d.donor_name}</td>
-                  <td className="px-4 py-3 text-[--muted]">{d.donor_email}</td>
-                  <td className="px-4 py-3 font-medium text-emerald-600 dark:text-emerald-400">{fmt(Number(d.amount))}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium capitalize ${statusColors[d.status] || ''}`}>
-                      {d.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-[--muted]">{d.campaign || '—'}</td>
-                  <td className="px-4 py-3 text-[--muted] capitalize">{d.channel || '—'}</td>
-                  <td className="px-4 py-3 text-[--muted]">
-                    {d.paid_at ? new Date(d.paid_at).toLocaleDateString('en-NG') : new Date(d.created_at).toLocaleDateString('en-NG')}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

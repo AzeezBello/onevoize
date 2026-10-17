@@ -2,8 +2,19 @@ import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { StatCard } from '@/components/dashboard/StatCard';
-import { Heart, Users, CalendarDays, Megaphone, TrendingUp } from 'lucide-react';
+import { CampaignProgress } from '@/components/dashboard/CampaignProgress';
+import { Heart, Users, CalendarDays, Megaphone, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 
 function fmt(n: number) {
   return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(n);
@@ -37,103 +48,128 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-[--foreground]">Welcome back, {session.user.name.split(' ')[0]} 👋</h2>
-        <p className="text-sm text-[--muted]">Here&apos;s what&apos;s happening with ONE VOIZE today.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Welcome back, {session.user.name.split(' ')[0]} 👋
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Real-time activity and club metrics powered by Neon DB.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs">
+            <Link href="/dashboard/donations">
+              View All Donations
+              <ArrowUpRight size={13} />
+            </Link>
+          </Button>
+        </div>
       </div>
 
-      {/* Stat cards */}
+      {/* Stat Cards with Emil Kowalski spring counter & tactile lifts */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard
           label="Total Raised"
           value={fmt(stats.totalRaised)}
-          sub={`${stats.donationCount} donations`}
+          sub={`${stats.donationCount} verified donations`}
           icon={<Heart size={18} />}
           color="blue"
         />
         <StatCard
           label="Active Members"
-          value={stats.memberCount.toLocaleString()}
+          value={stats.memberCount}
+          numeric
+          sub="Registered club members"
           icon={<Users size={18} />}
           color="green"
         />
         <StatCard
           label="Upcoming Events"
           value={stats.upcomingEvents}
+          numeric
+          sub="Scheduled gatherings"
           icon={<CalendarDays size={18} />}
           color="gold"
         />
         <StatCard
           label="Active Campaigns"
           value={stats.activeCampaigns}
-          sub={`${fmt(stats.campaignRaised)} / ${fmt(stats.campaignGoal)} goal`}
+          numeric
+          sub={`${fmt(stats.campaignRaised)} funded`}
           icon={<Megaphone size={18} />}
           color="red"
         />
       </div>
 
-      {/* Campaign progress */}
+      {/* Campaign Progress Card */}
       {stats.campaignGoal > 0 && (
-        <div className="rounded-xl border border-[--border] bg-[--card] p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-[--foreground] flex items-center gap-2">
-              <TrendingUp size={16} className="text-[--primary]" />
-              Campaign Progress
-            </h3>
-            <Link href="/dashboard/campaigns" className="text-xs text-[--primary] hover:underline">View all →</Link>
-          </div>
-          <div className="space-y-1">
-            <div className="flex justify-between text-xs text-[--muted]">
-              <span>{fmt(stats.campaignRaised)} raised</span>
-              <span>{fmt(stats.campaignGoal)} goal</span>
-            </div>
-            <div className="h-2.5 rounded-full bg-[--border] overflow-hidden">
-              <div
-                className="h-full rounded-full bg-[--primary] transition-all"
-                style={{ width: `${Math.min(100, (stats.campaignRaised / stats.campaignGoal) * 100).toFixed(1)}%` }}
-              />
-            </div>
-            <p className="text-xs text-[--muted] text-right">
-              {((stats.campaignRaised / stats.campaignGoal) * 100).toFixed(1)}% of goal reached
-            </p>
-          </div>
-        </div>
+        <CampaignProgress
+          goal={stats.campaignGoal}
+          raised={stats.campaignRaised}
+          formattedGoal={fmt(stats.campaignGoal)}
+          formattedRaised={fmt(stats.campaignRaised)}
+        />
       )}
 
-      {/* Recent donations */}
-      <div className="rounded-xl border border-[--border] bg-[--card] overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[--border]">
-          <h3 className="font-semibold text-[--foreground]">Recent Donations</h3>
-          <Link href="/dashboard/donations" className="text-xs text-[--primary] hover:underline">View all →</Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[--muted-surface]">
-              <tr>
-                {['Donor', 'Email', 'Amount', 'Campaign', 'Date'].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[--muted] uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[--border]">
-              {stats.recentDonations.length === 0 && (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-[--muted] text-sm">No donations yet.</td></tr>
+      {/* Recent Donations Table in Shadcn Card */}
+      <Card className="border border-border/80 shadow-none overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-border/60">
+          <div>
+            <CardTitle className="text-sm font-semibold tracking-normal normal-case">
+              Recent Confirmed Donations
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Latest transactions processed via Paystack
+            </CardDescription>
+          </div>
+          <Button asChild variant="ghost" size="sm" className="text-xs text-primary hover:text-primary">
+            <Link href="/dashboard/donations">View all →</Link>
+          </Button>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Donor</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Campaign</TableHead>
+                <TableHead className="text-right">Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {stats.recentDonations.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="py-10 text-center text-muted-foreground text-sm">
+                    No confirmed donations recorded yet.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                stats.recentDonations.map((d, i) => (
+                  <TableRow key={i} className="transition-colors">
+                    <TableCell className="font-medium text-foreground py-3.5">
+                      {d.donor_name}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground py-3.5 text-xs">
+                      {d.donor_email}
+                    </TableCell>
+                    <TableCell className="py-3.5 font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                      {fmt(Number(d.amount))}
+                    </TableCell>
+                    <TableCell className="py-3.5 text-muted-foreground text-xs">
+                      {d.campaign || 'General Donation'}
+                    </TableCell>
+                    <TableCell className="py-3.5 text-right text-muted-foreground text-xs tabular-nums">
+                      {d.paid_at ? new Date(d.paid_at).toLocaleDateString('en-NG') : '—'}
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
-              {stats.recentDonations.map((d, i) => (
-                <tr key={i} className="hover:bg-[--accent]/40 transition-colors">
-                  <td className="px-4 py-3 font-medium text-[--foreground]">{d.donor_name}</td>
-                  <td className="px-4 py-3 text-[--muted]">{d.donor_email}</td>
-                  <td className="px-4 py-3 text-emerald-600 dark:text-emerald-400 font-medium">{fmt(Number(d.amount))}</td>
-                  <td className="px-4 py-3 text-[--muted]">{d.campaign || '—'}</td>
-                  <td className="px-4 py-3 text-[--muted]">
-                    {d.paid_at ? new Date(d.paid_at).toLocaleDateString('en-NG') : '—'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,11 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, HeartHandshake, Users, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { ArrowRight, HeartHandshake, Users, ShieldCheck, Heart, type LucideIcon } from 'lucide-react'
 import { siteConfig } from '@/lib/site'
 import { featuredTrustees, portraitAlt } from '@/lib/people'
 import { HomeHero } from '@/components/HomeHero'
 import { HomeGallerySlider } from '@/components/HomeGallerySlider'
 import { AnniversaryBanner } from '@/components/AnniversaryBanner'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 const values: Array<[string, string, LucideIcon]> = [
   ['Mutual support', 'We uplift ourselves and stand together through life\'s important moments.', Users],
@@ -14,64 +16,170 @@ const values: Array<[string, string, LucideIcon]> = [
 ]
 
 export default function Home() {
-  return <>
-    <HomeHero
-      eyebrow={siteConfig.displayName}
-      title="One club."
-      titleHighlight="One voize."
-      text="Friendship, mutual support and practical service for a community that shows up together."
-      badgeText="Since 2025"
-      badgeSubtext="One organisation. One voice."
-      primaryAction={{ label: 'Join the club', href: '/membership' }}
-      secondaryAction={{ label: 'Support our work', href: '/donate' }}
-      keywords={['Friendship', 'Service', 'Unity']}
-      scrollLabel="Explore the club ↓"
-    />
+  return (
+    <>
+      <HomeHero
+        eyebrow={siteConfig.displayName}
+        title="One club."
+        titleHighlight="One voize."
+        text="Friendship, mutual support and practical service for a community that shows up together."
+        badgeText="Since 2025"
+        badgeSubtext="One organisation. One voice."
+        primaryAction={{ label: 'Join the club', href: '/membership' }}
+        secondaryAction={{ label: 'Support our work', href: '/donate' }}
+        keywords={['Friendship', 'Service', 'Unity']}
+        scrollLabel="Explore the club ↓"
+      />
 
-    <section className="home-intro section">
-      <div className="container home-intro-grid">
-        <div><div className="eyebrow">Our purpose</div><h2 className="serif">Good friendship becomes meaningful service.</h2></div>
-        <div><p className="home-lead">We are a not-for-profit and non-political club committed to integrity, unity, peace and progress.</p><p className="home-muted">From member support to charitable giving, Global Voize creates a dependable community where people contribute, connect and leave a positive mark.</p><Link href="/about" className="text-link" style={{ marginTop: 18 }}>Learn about the club <ArrowRight size={16}/></Link></div>
-      </div>
-    </section>
-
-    <section className="section home-values">
-      <div className="container">
-        <div className="home-section-heading"><div><div className="eyebrow">What guides us</div><h2 className="serif">Our values are lived together.</h2></div><Link href="/constitution" className="text-link">Read the constitution <ArrowRight size={16}/></Link></div>
-        <div className="home-value-grid">{values.map(([title, description, Icon]) => <article key={title} className="home-value-card"><div className="home-icon"><Icon size={22}/></div><h3 className="serif">{title}</h3><p>{description}</p></article>)}</div>
-      </div>
-    </section>
-
-    <section className="section home-community">
-      <div className="container home-community-grid">
-        <div className="home-community-photo"><Image src="/images/club/members-at-event.jpeg" alt="Three club members in white polo shirts in front of the Global Voize anniversary banner" fill sizes="(max-width: 800px) 100vw, 50vw"/></div>
-        <div className="home-community-copy"><div className="eyebrow">The club in motion</div><h2 className="serif">Connection is part of the work.</h2><p>Our outings, celebrations and gatherings make room for friendship, belonging and the shared responsibility to give back.</p><div className="home-link-row"><Link href="/gallery" className="btn btn-primary">View the gallery <ArrowRight size={17}/></Link><Link href="/gallery#club-videos" className="text-link">Watch club videos <ArrowRight size={16}/></Link></div></div>
-      </div>
-    </section>
-
-    <AnniversaryBanner action={{ label: 'See the celebration', href: '/gallery' }}/>
-
-    <section className="section home-gallery">
-      <div className="container"><HomeGallerySlider/></div>
-    </section>
-
-    <section className="section home-leadership">
-      <div className="container">
-        <div className="home-section-heading">
+      <section className="home-intro section">
+        <div className="container home-intro-grid">
           <div>
-            <div className="eyebrow">Leadership</div>
-            <h2 className="serif">People entrusted to serve.</h2>
-            </div>
-            <Link href="/exco" className="text-link">Meet the Exco <ArrowRight size={16}/>
+            <div className="eyebrow">Our purpose</div>
+            <h2 className="serif">Good friendship becomes meaningful service.</h2>
+          </div>
+          <div>
+            <p className="home-lead">
+              We are a not-for-profit and non-political club committed to integrity, unity, peace and progress.
+            </p>
+            <p className="home-muted">
+              From member support to charitable giving, Global Voize creates a dependable community where people contribute, connect and leave a positive mark.
+            </p>
+            <Link href="/about" className="text-link group" style={{ marginTop: 18 }}>
+              Learn about the club
+              <ArrowRight size={16} className="transition-transform duration-150 group-hover:translate-x-1" />
             </Link>
-            </div>
-            <div className="home-trustee-grid">{featuredTrustees.map((person) => <Link href="/exco" className="home-trustee" key={person.name}><div className="home-trustee-image"><Image src={person.image} alt={portraitAlt(person)} fill sizes="(max-width: 640px) 100vw, (max-width: 800px) 50vw, 33vw"/></div><strong>{person.name}</strong><span>{person.role}</span></Link>)}
-            </div>
-            </div>
-    </section>
+          </div>
+        </div>
+      </section>
 
-    <section className="home-cta"><div className="container home-cta-inner"><div><div className="eyebrow">Your place in the club</div><h2 className="serif">Show up for something that matters.</h2></div><div className="home-actions"><Link href="/membership" className="btn btn-gold">Join the club <ArrowRight size={17}/></Link><Link href="/donate" className="btn btn-ghost">Donate</Link></div></div></section>
+      <section className="section home-values">
+        <div className="container">
+          <div className="home-section-heading">
+            <div>
+              <div className="eyebrow">What guides us</div>
+              <h2 className="serif">Our values are lived together.</h2>
+            </div>
+            <Link href="/constitution" className="text-link group">
+              Read the constitution
+              <ArrowRight size={16} className="transition-transform duration-150 group-hover:translate-x-1" />
+            </Link>
+          </div>
 
-    <div className="sr-only">{siteConfig.displayName}: {siteConfig.description}</div>
-  </>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {values.map(([title, description, Icon]) => (
+              <Card
+                key={title}
+                className="border border-border/80 shadow-none hover:border-border hover:shadow-sm transition-all duration-200"
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary mb-2">
+                    <Icon size={22} />
+                  </div>
+                  <CardTitle className="font-serif text-xl tracking-normal normal-case">
+                    {title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section home-community">
+        <div className="container home-community-grid">
+          <div className="home-community-photo">
+            <Image
+              src="/images/club/members-at-event.jpeg"
+              alt="Three club members in white polo shirts in front of the Global Voize anniversary banner"
+              fill
+              sizes="(max-width: 800px) 100vw, 50vw"
+            />
+          </div>
+          <div className="home-community-copy">
+            <div className="eyebrow">The club in motion</div>
+            <h2 className="serif">Connection is part of the work.</h2>
+            <p>
+              Our outings, celebrations and gatherings make room for friendship, belonging and the shared responsibility to give back.
+            </p>
+            <div className="home-link-row flex items-center gap-4 pt-2">
+              <Button asChild size="default" className="gap-2">
+                <Link href="/gallery">
+                  View the gallery
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
+              <Link href="/gallery#club-videos" className="text-link group">
+                Watch club videos
+                <ArrowRight size={15} className="transition-transform duration-150 group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <AnniversaryBanner action={{ label: 'See the celebration', href: '/gallery' }} />
+
+      <section className="section home-gallery">
+        <div className="container">
+          <HomeGallerySlider />
+        </div>
+      </section>
+
+      <section className="section home-leadership">
+        <div className="container">
+          <div className="home-section-heading">
+            <div>
+              <div className="eyebrow">Leadership</div>
+              <h2 className="serif">People entrusted to serve.</h2>
+            </div>
+            <Link href="/exco" className="text-link group">
+              Meet the Exco
+              <ArrowRight size={16} className="transition-transform duration-150 group-hover:translate-x-1" />
+            </Link>
+          </div>
+          <div className="home-trustee-grid">
+            {featuredTrustees.map((person) => (
+              <Link href="/exco" className="home-trustee" key={person.name}>
+                <div className="home-trustee-image">
+                  <Image src={person.image} alt={portraitAlt(person)} fill sizes="(max-width: 640px) 100vw, (max-width: 800px) 50vw, 33vw" />
+                </div>
+                <strong>{person.name}</strong>
+                <span>{person.role}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-cta">
+        <div className="container home-cta-inner">
+          <div>
+            <div className="eyebrow">Your place in the club</div>
+            <h2 className="serif">Show up for something that matters.</h2>
+          </div>
+          <div className="home-actions flex items-center gap-3">
+            <Button asChild size="lg" className="bg-[var(--gold)] text-[#080b70] hover:bg-[var(--gold-soft)] font-bold gap-2">
+              <Link href="/membership">
+                Join the club
+                <ArrowRight size={17} />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 gap-2">
+              <Link href="/donate">
+                <Heart size={16} className="fill-current" />
+                Donate
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <div className="sr-only">{siteConfig.displayName}: {siteConfig.description}</div>
+    </>
+  )
 }

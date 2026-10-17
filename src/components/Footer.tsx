@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Mail, Share2, Globe2, Send } from 'lucide-react'
 import { siteConfig } from '@/lib/site'
 
@@ -11,6 +14,9 @@ const socialLinks = [
 ]
 
 export function Footer() {
+  const pathname = usePathname()
+  if (pathname?.startsWith('/dashboard')) return null
+
   return (
     <footer className="site-footer">
       <div className="container">

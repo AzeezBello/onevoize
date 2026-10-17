@@ -2,8 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, UserPlus, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'motion/react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { tapScale, springConfig } from '@/lib/motion';
 
 export default function NewUserPage() {
   const router = useRouter();
@@ -35,74 +41,110 @@ export default function NewUserPage() {
     }
   }
 
-  const fields: Array<{ label: string; key: keyof typeof form; type: string }> = [
-    { label: 'Full Name',    key: 'name',     type: 'text' },
-    { label: 'Email',        key: 'email',    type: 'email' },
-    { label: 'Password',     key: 'password', type: 'password' },
-  ];
-
   return (
-    <div className="max-w-lg space-y-6">
+    <div className="max-w-xl space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/superadmin/users" className="text-[--muted] hover:text-[--foreground] transition-colors">
-          <ArrowLeft size={18} />
-        </Link>
+        <Button asChild variant="ghost" size="icon-sm">
+          <Link href="/dashboard/superadmin/users">
+            <ArrowLeft size={16} />
+          </Link>
+        </Button>
         <div>
-          <h2 className="text-xl font-bold text-[--foreground]">Add Admin User</h2>
-          <p className="text-sm text-[--muted]">Create a new admin or superadmin account</p>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Add Administrator</h2>
+          <p className="text-sm text-muted-foreground">Provision a new admin or superadmin account in Neon DB</p>
         </div>
       </div>
 
-      <div className="rounded-xl border border-[--border] bg-[--card] p-6">
-        {error && (
-          <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-400">
-            {error}
+      <Card className="border border-border/80 shadow-none">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <UserPlus size={16} className="text-primary" />
+            <CardTitle className="text-sm font-semibold tracking-normal normal-case">Account Information</CardTitle>
           </div>
-        )}
+          <CardDescription className="text-xs">
+            The new user will be able to sign in immediately with these credentials.
+          </CardDescription>
+        </CardHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {fields.map(f => (
-            <div key={f.key}>
-              <label className="block text-sm font-medium text-[--foreground] mb-1.5">{f.label}</label>
-              <input
-                type={f.type}
-                value={form[f.key]}
-                onChange={set(f.key)}
+        <CardContent>
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, y: -4 }}
+                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={springConfig.snappy}
+                className="mb-4 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/8 p-3 text-sm text-destructive"
+              >
+                <AlertCircle size={15} className="mt-0.5 shrink-0" />
+                <span>{error}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={form.name}
+                onChange={set('name')}
                 required
-                className="w-full rounded-lg border border-[--input] bg-[--background] px-3 py-2.5 text-sm text-[--foreground] focus:outline-none focus:ring-2 focus:ring-[--ring]"
+                placeholder="e.g. Adeyemi Adeleke"
               />
             </div>
-          ))}
 
-          <div>
-            <label className="block text-sm font-medium text-[--foreground] mb-1.5">Role</label>
-            <select
-              value={form.role}
-              onChange={set('role')}
-              className="w-full rounded-lg border border-[--input] bg-[--background] px-3 py-2.5 text-sm text-[--foreground] focus:outline-none focus:ring-2 focus:ring-[--ring]"
-            >
-              <option value="admin">Admin</option>
-              <option value="superadmin">Super Admin</option>
-            </select>
-          </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                value={form.email}
+                onChange={set('email')}
+                required
+                placeholder="admin@onevoize.org"
+              />
+            </div>
 
-          <div className="flex gap-3 pt-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded-lg bg-[--primary] text-[--primary-foreground] px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
-            >
-              {loading ? 'Creating…' : 'Create User'}
-            </button>
-            <Link
-              href="/dashboard/superadmin/users"
-              className="rounded-lg border border-[--border] px-5 py-2.5 text-sm text-[--muted] hover:bg-[--accent] transition-colors"
-            >
-              Cancel
-            </Link>
-          </div>
-        </form>
-      </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="password">Temporary Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={form.password}
+                onChange={set('password')}
+                required
+                placeholder="••••••••••••"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="role">System Role</Label>
+              <select
+                id="role"
+                value={form.role}
+                onChange={set('role')}
+                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value="admin">Admin (Events, Members, Donations)</option>
+                <option value="superadmin">Super Admin (Full system control)</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-3 pt-3">
+              <motion.div whileTap={tapScale}>
+                <Button type="submit" disabled={loading} size="default">
+                  {loading ? 'Creating Account…' : 'Create Account'}
+                </Button>
+              </motion.div>
+              <Button asChild variant="outline" size="default">
+                <Link href="/dashboard/superadmin/users">Cancel</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

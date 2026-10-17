@@ -17,6 +17,7 @@
     "clsx": "latest",
     "cn": "^0.3.0",
     "lucide-react": "^1.45.0",
+    "motion": "^14.3.0",
     "next": "latest",
     "next-auth": "^5.0.0-beta.32",
     "react": "latest",

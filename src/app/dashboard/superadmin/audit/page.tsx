@@ -1,7 +1,16 @@
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { ScrollText } from 'lucide-react';
+import { ScrollText, ShieldAlert } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
 
 type AuditLog = {
   id: number;
@@ -31,51 +40,67 @@ export default async function AuditPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-[--foreground] flex items-center gap-2">
-          <ScrollText size={20} className="text-amber-500" />
-          Audit Log
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
+          <ScrollText size={22} className="text-amber-500" />
+          Audit Trail Log
         </h2>
-        <p className="text-sm text-[--muted]">Full trail of administrative actions (last 200 entries)</p>
+        <p className="text-sm text-muted-foreground">
+          Immutable event log of administrative actions, user creation, and database mutations.
+        </p>
       </div>
 
-      <div className="rounded-xl border border-[--border] bg-[--card] overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[--muted-surface]">
-              <tr>
-                {['Time', 'Admin', 'Action', 'Entity', 'ID', 'IP'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-medium text-[--muted] uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[--border]">
-              {logs.length === 0 && (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-[--muted]">No audit entries yet.</td></tr>
+      <Card className="border border-border/80 shadow-none overflow-hidden">
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Timestamp</TableHead>
+                <TableHead>Administrator</TableHead>
+                <TableHead>Action</TableHead>
+                <TableHead>Target Entity</TableHead>
+                <TableHead>Record ID</TableHead>
+                <TableHead className="text-right">Origin IP</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {logs.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="py-12 text-center text-muted-foreground text-sm">
+                    No administrative audit events recorded yet.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                logs.map(log => (
+                  <TableRow key={log.id} className="transition-colors">
+                    <TableCell className="text-xs text-muted-foreground tabular-nums whitespace-nowrap py-3.5">
+                      {new Date(log.created_at).toLocaleString('en-NG')}
+                    </TableCell>
+                    <TableCell className="py-3.5">
+                      <p className="font-medium text-foreground text-xs">{log.user_name || 'System / Automated'}</p>
+                      {log.user_email && <p className="text-[11px] text-muted-foreground">{log.user_email}</p>}
+                    </TableCell>
+                    <TableCell className="py-3.5">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-muted text-foreground border border-border/60">
+                        {log.action}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground capitalize py-3.5">
+                      {log.entity}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground font-mono py-3.5">
+                      {log.entity_id ?? '—'}
+                    </TableCell>
+                    <TableCell className="text-right text-xs font-mono text-muted-foreground py-3.5">
+                      {log.ip_address || '127.0.0.1'}
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
-              {logs.map(log => (
-                <tr key={log.id} className="hover:bg-[--accent]/30 transition-colors">
-                  <td className="px-4 py-3 text-xs text-[--muted] whitespace-nowrap">
-                    {new Date(log.created_at).toLocaleString('en-NG')}
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-[--foreground] text-xs">{log.user_name || 'System'}</p>
-                    {log.user_email && <p className="text-[10px] text-[--muted]">{log.user_email}</p>}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="inline-block px-2 py-0.5 rounded-full bg-[--accent] text-[--foreground] text-xs font-mono">
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-xs text-[--muted] capitalize">{log.entity}</td>
-                  <td className="px-4 py-3 text-xs text-[--muted]">{log.entity_id ?? '—'}</td>
-                  <td className="px-4 py-3 text-xs font-mono text-[--muted]">{log.ip_address || '—'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
