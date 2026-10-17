@@ -16,7 +16,8 @@ function getClient(): NeonQueryFunction<false, false> {
         'Database connection string not found. Please ensure DATABASE_URL or POSTGRES_URL is configured.',
       );
     }
-    _client = neon(url);
+    const cleanUrl = url.trim().replace(/^['"]|['"]$/g, '');
+    _client = neon(cleanUrl);
   }
   return _client;
 }
