@@ -4,8 +4,18 @@ let _client: NeonQueryFunction<false, false> | null = null;
 
 function getClient(): NeonQueryFunction<false, false> {
   if (!_client) {
-    const url = process.env.DATABASE_URL;
-    if (!url) throw new Error('DATABASE_URL is not configured');
+    // Supports standard Neon and Vercel's native Neon Postgres integration variables
+    const url =
+      process.env.DATABASE_URL ||
+      process.env.POSTGRES_URL ||
+      process.env.DATABASE_URL_UNPOOLED ||
+      process.env.POSTGRES_URL_NON_POOLING;
+
+    if (!url) {
+      throw new Error(
+        'Database connection string not found. Please ensure DATABASE_URL or POSTGRES_URL is configured.',
+      );
+    }
     _client = neon(url);
   }
   return _client;

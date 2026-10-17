@@ -21,10 +21,15 @@ for (const line of envContent.split('\n')) {
   if (match) process.env[match[1].trim()] = match[2].trim();
 }
 
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL =
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.DATABASE_URL_UNPOOLED ||
+  process.env.POSTGRES_URL_NON_POOLING;
+
 if (!DATABASE_URL || DATABASE_URL.includes('user:password@ep-xxx')) {
-  console.error('\n❌  DATABASE_URL is still the placeholder in .env.local');
-  console.error('   Replace it with your real Neon connection string first.\n');
+  console.error('\n❌  No active database connection string found in .env.local');
+  console.error('   Please pull your Vercel envs (`npx vercel env pull .env.local`) or add DATABASE_URL.\n');
   process.exit(1);
 }
 
