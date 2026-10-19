@@ -1,8 +1,7 @@
 import { db } from '@/lib/db';
-import { Heart, Download } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { FilterTabs } from '@/components/dashboard/FilterTabs';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Table,
   TableHeader,
@@ -11,27 +10,24 @@ import {
   TableRow,
   TableCell,
 } from '@/components/ui/table';
+import {
+  DonationsHeaderActions,
+  DonationStatusActions,
+  type DonationExportItem,
+} from './DonationsClientActions';
 
 function fmt(n: number) {
   return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(n);
 }
 
-type Donation = {
-  id: number;
-  reference: string;
-  donor_name: string;
-  donor_email: string;
-  amount: string;
-  status: string;
-  campaign: string | null;
-  channel: string | null;
-  paid_at: string | null;
-  created_at: string;
-};
+type Donation = DonationExportItem;
 
 async function getDonations(status?: string): Promise<Donation[]> {
-  const where = status ? `WHERE status = '${status}'` : '';
-  const rows = await db(`SELECT * FROM donations ${where} ORDER BY created_at DESC LIMIT 100`);
+  if (status && ['success', 'pending', 'failed'].includes(status)) {
+    const rows = await db('SELECT * FROM donations WHERE status = $1 ORDER BY created_at DESC LIMIT 100', [status]);
+    return rows as unknown as Donation[];
+  }
+  const rows = await db('SELECT * FROM donations ORDER BY created_at DESC LIMIT 100');
   return rows as unknown as Donation[];
 }
 
@@ -74,17 +70,14 @@ export default async function DonationsPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Heart size={20} className="text-primary" />
+            <Heart size={20} className="text-primary" aria-hidden="true" />
             Donations Management
           </h2>
           <p className="text-sm text-muted-foreground">
-            Audit and inspect Paystack transactions recorded in Neon DB.
+            Audit Paystack transactions, export records, or log offline transfers.
           </p>
         </div>
-        <Button variant="outline" size="sm" className="gap-2 self-start sm:self-auto">
-          <Download size={14} />
-          Export CSV
-        </Button>
+        <DonationsHeaderActions donations={donations} />
       </div>
 
       {/* Summary metric cards */}
@@ -127,13 +120,14 @@ export default async function DonationsPage({
                 <TableHead>Status</TableHead>
                 <TableHead>Campaign</TableHead>
                 <TableHead>Channel</TableHead>
-                <TableHead className="text-right">Date</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="text-right">Reconcile</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {donations.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="py-12 text-center text-muted-foreground text-sm">
+                  <TableCell colSpan={9} className="py-12 text-center text-muted-foreground text-sm">
                     No donations found matching this filter.
                   </TableCell>
                 </TableRow>
@@ -163,8 +157,11 @@ export default async function DonationsPage({
                     <TableCell className="text-muted-foreground text-xs capitalize py-3.5">
                       {d.channel || '—'}
                     </TableCell>
-                    <TableCell className="text-right text-muted-foreground text-xs tabular-nums py-3.5">
+                    <TableCell className="text-muted-foreground text-xs tabular-nums py-3.5">
                       {d.paid_at ? new Date(d.paid_at).toLocaleDateString('en-NG') : new Date(d.created_at).toLocaleDateString('en-NG')}
+                    </TableCell>
+                    <TableCell className="text-right py-3.5">
+                      <DonationStatusActions id={d.id} donorName={d.donor_name} status={d.status} />
                     </TableCell>
                   </TableRow>
                 ))
@@ -176,3 +173,4 @@ export default async function DonationsPage({
     </div>
   );
 }
+

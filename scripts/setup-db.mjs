@@ -64,6 +64,16 @@ for (const stmt of statements) {
     console.error(`⚠️  Warning on statement:`, stmt.substring(0, 60), `... Error:`, err?.message || err);
   }
 }
+try {
+  await sql.query('ALTER TABLE members ADD COLUMN IF NOT EXISTS occupation TEXT');
+  await sql.query('ALTER TABLE members ADD COLUMN IF NOT EXISTS application_reason TEXT');
+  await sql.query('ALTER TABLE members DROP CONSTRAINT IF EXISTS members_status_check');
+  await sql.query(
+    "ALTER TABLE members ADD CONSTRAINT members_status_check CHECK (status IN ('pending','active','inactive','suspended'))",
+  );
+} catch (err) {
+  console.error('⚠️  Warning updating members constraint:', err?.message || err);
+}
 console.log('✅  Schema initialized successfully!');
 
 // ─── 2. Seed Superadmin ───────────────────────────────────────────────────────
@@ -118,8 +128,30 @@ try {
     `);
     console.log('✅  Sample events seeded.');
   }
+
+  const existingGallery = await sql.query('SELECT count(*)::int as count FROM gallery_items');
+  if (existingGallery[0]?.count === 0) {
+    console.log('🌱  Seeding initial club gallery photos and videos...');
+    await sql.query(`
+      INSERT INTO gallery_items (media_type, src, title, caption, alt_text, category, display_order, is_published)
+      VALUES
+        ('image', '/images/club/gvc-at-mother-less-home-in-surulere.jpeg', 'Charity Outreach at Motherless Home in Surulere', 'Gvc at mother less home in surulere for Charity Donation towards our first year anniversary', 'Gvc at mother less home in surulere for Charity Donation towards our first year anniversary', 'outreach', 1, TRUE),
+        ('image', '/images/club/members-at-event.jpeg', 'Members on the Green Carpet', 'Three club members in white polo shirts on a green carpet in front of the Global Voize anniversary banner', 'Three club members in white polo shirts on a green carpet in front of the Global Voize anniversary banner', 'events', 2, TRUE),
+        ('image', '/images/club/Hon%20Prince%20Adeyeye%20and%20Hon%20Prince%20Adeniyi%20at%20a%20party%20represent%20GVC.jpeg', 'Hon. Prince Adeyeye & Hon. Prince Adeniyi Representing GVC', 'Global Voize Club representatives Hon. Prince Adeyeye and Hon. Prince Adeniyi at a party', 'Global Voize Club representatives Hon. Prince Adeyeye and Hon. Prince Adeniyi at a party', 'club', 3, TRUE),
+        ('image', '/images/club/Hon%20Prince%20Adeyeye%20and%20Hon%20Prince%20Adeniyi%20at%20a%20party%20represent.jpeg', 'Club Representatives at Celebration', 'Hon. Prince Adeyeye and Hon. Prince Adeniyi representing Global Voize Club at a party', 'Hon. Prince Adeyeye and Hon. Prince Adeniyi representing Global Voize Club at a party', 'club', 4, TRUE),
+        ('image', '/images/club/club-celebration.jpeg', 'Club Celebration Gathering', 'A club member wearing a blue club sash and traditional cap among guests dressed in white lace at a celebration', 'A club member wearing a blue club sash and traditional cap among guests dressed in white lace at a celebration', 'celebration', 5, TRUE),
+        ('image', '/images/club/members-group.jpeg', 'Outreach Visit Group Portrait', 'Club members in matching white polo shirts lined up outside a care centre during an outreach visit', 'Club members in matching white polo shirts lined up outside a care centre during an outreach visit', 'outreach', 6, TRUE),
+        ('image', '/images/club/club-leaders.jpeg', 'Club Leaders at Welcome Banner', 'Three club members in white polo shirts holding bottled water in front of the Global Voize welcome banner', 'Three club members in white polo shirts holding bottled water in front of the Global Voize welcome banner', 'club', 7, TRUE),
+        ('video', '/images/club/event-setup.mp4', 'Anniversary preparations', 'Awogbadebo Alabi Mobolaji, General Secretary, during preparations for the club''s first anniversary celebration.', 'Anniversary preparations', 'events', 8, TRUE),
+        ('video', '/images/club/event.mp4', 'Club event', 'Members and guests at a club gathering.', 'Club event', 'events', 9, TRUE),
+        ('video', '/images/club/events.mp4', 'Club events', 'Highlights from club outings and gatherings.', 'Club events', 'events', 10, TRUE),
+        ('video', '/images/club/k1-wasiu.mp4', 'Meeting K1 De Ultimate', 'Sunday Olufemi Jeje introduces the club to King Wasiu Ayinde Marshal (K1 De Ultimate) at an event.', 'Meeting K1 De Ultimate', 'events', 11, TRUE)
+    `);
+    console.log('✅  Initial gallery photos & videos seeded.');
+  }
 } catch (err) {
-  console.log('⚠️  Could not seed sample campaigns/events (optional):', err?.message);
+  console.log('⚠️  Could not seed sample campaigns/events/gallery (optional):', err?.message);
 }
 
 console.log('\n🎉  Database setup complete! You can sign in at: /dashboard/login\n');
+

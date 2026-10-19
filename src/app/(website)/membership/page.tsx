@@ -58,8 +58,12 @@ export default function MembershipPage() {
               </p>
 
               <p>
-                Your email application will open in your preferred email
-                application for review and submission.
+                Your registration is stored securely with a{' '}
+                <strong className="font-medium text-foreground">
+                  Submitted — Pending Review
+                </strong>{' '}
+                status for the screening committee. You can also download/print a
+                copy or open your application in your preferred email app.
               </p>
             </div>
 

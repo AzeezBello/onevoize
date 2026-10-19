@@ -8,6 +8,7 @@ import { HomeGallerySlider } from '@/components/HomeGallerySlider'
 import { AnniversaryBanner } from '@/components/AnniversaryBanner'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { getPublicGalleryData } from '@/lib/gallery-server'
 
 const values: Array<[string, string, LucideIcon]> = [
   ['Mutual support', 'We uplift ourselves and stand together through life\'s important moments.', Users],
@@ -15,7 +16,9 @@ const values: Array<[string, string, LucideIcon]> = [
   ['Responsibility', 'We represent Global Voize with integrity wherever we are invited.', ShieldCheck],
 ]
 
-export default function Home() {
+export default async function Home() {
+  const { photos } = await getPublicGalleryData()
+
   return (
     <>
       <HomeHero
@@ -126,7 +129,7 @@ export default function Home() {
 
       <section className="section home-gallery">
         <div className="container">
-          <HomeGallerySlider />
+          <HomeGallerySlider photos={photos} />
         </div>
       </section>
 

@@ -22,8 +22,11 @@ const statusBadgeClasses: Record<string, string> = {
 };
 
 async function getEvents(status?: string): Promise<Event[]> {
-  const where = status ? `WHERE status = '${status}'` : '';
-  const rows = await db(`SELECT * FROM events ${where} ORDER BY event_date DESC`);
+  if (status && ['upcoming', 'ongoing', 'completed', 'cancelled'].includes(status)) {
+    const rows = await db('SELECT * FROM events WHERE status = $1 ORDER BY event_date DESC', [status]);
+    return rows as unknown as Event[];
+  }
+  const rows = await db('SELECT * FROM events ORDER BY event_date DESC');
   return rows as unknown as Event[];
 }
 
@@ -49,7 +52,7 @@ export default async function EventsPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <CalendarDays size={20} className="text-primary" />
+            <CalendarDays size={20} className="text-primary" aria-hidden="true" />
             Events Management
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -58,7 +61,7 @@ export default async function EventsPage({
         </div>
         <Button asChild size="sm" className="gap-2 self-start sm:self-auto">
           <Link href="/dashboard/events/new">
-            <Plus size={15} />
+            <Plus size={15} aria-hidden="true" />
             New Event
           </Link>
         </Button>
@@ -77,7 +80,7 @@ export default async function EventsPage({
       {/* Events grid */}
       {events.length === 0 ? (
         <Card className="border border-dashed border-border/80 bg-muted/20 p-12 text-center shadow-none">
-          <CalendarDays size={42} className="mx-auto text-muted-foreground/40 mb-3" />
+          <CalendarDays size={42} className="mx-auto text-muted-foreground/40 mb-3" aria-hidden="true" />
           <p className="text-muted-foreground text-sm">No events found under this status filter.</p>
           <div className="mt-4">
             <Button asChild variant="outline" size="sm">
@@ -105,7 +108,7 @@ export default async function EventsPage({
 
               <CardContent className="space-y-2 text-xs text-muted-foreground pt-0">
                 <div className="flex items-center gap-2 text-foreground/80 font-medium">
-                  <CalendarDays size={14} className="text-primary shrink-0" />
+                  <CalendarDays size={14} className="text-primary shrink-0" aria-hidden="true" />
                   <span>
                     {new Date(ev.event_date).toLocaleDateString('en-NG', {
                       weekday: 'short',
@@ -117,13 +120,13 @@ export default async function EventsPage({
                 </div>
                 {ev.location && (
                   <div className="flex items-center gap-2">
-                    <MapPin size={14} className="shrink-0 text-muted-foreground" />
+                    <MapPin size={14} className="shrink-0 text-muted-foreground" aria-hidden="true" />
                     <span className="truncate">{ev.location}</span>
                   </div>
                 )}
                 {ev.max_attendees && (
                   <div className="flex items-center gap-2">
-                    <Users size={14} className="shrink-0 text-muted-foreground" />
+                    <Users size={14} className="shrink-0 text-muted-foreground" aria-hidden="true" />
                     <span>Capacity: {ev.max_attendees} attendees</span>
                   </div>
                 )}
@@ -133,11 +136,15 @@ export default async function EventsPage({
                 <Button asChild variant="ghost" size="sm" className="h-8 px-2 text-xs text-primary hover:text-primary">
                   <Link href={`/dashboard/events/${ev.id}`}>
                     Details
-                    <ArrowRight size={12} className="ml-1" />
+                    <span className="sr-only"> for {ev.title}</span>
+                    <ArrowRight size={12} className="ml-1" aria-hidden="true" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="h-8 px-3 text-xs">
-                  <Link href={`/dashboard/events/${ev.id}/edit`}>Edit</Link>
+                  <Link href={`/dashboard/events/${ev.id}/edit`}>
+                    Edit
+                    <span className="sr-only"> {ev.title}</span>
+                  </Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -147,3 +154,4 @@ export default async function EventsPage({
     </div>
   );
 }
+

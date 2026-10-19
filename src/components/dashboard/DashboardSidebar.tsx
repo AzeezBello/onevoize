@@ -11,11 +11,13 @@ import {
   Users,
   CalendarDays,
   Megaphone,
+  Images,
   ShieldCheck,
   UserCog,
   ChevronLeft,
   ChevronRight,
   ScrollText,
+  Database,
 } from 'lucide-react';
 import type { UserRole } from '@/lib/auth';
 import { Separator } from '@/components/ui/separator';
@@ -27,17 +29,20 @@ interface NavItem {
   icon: React.ElementType;
   roles?: UserRole[];
   section?: 'main' | 'super';
+  exact?: boolean;
 }
 
 const navItems: NavItem[] = [
-  { label: 'Overview',    href: '/dashboard',                    icon: LayoutDashboard, section: 'main' },
-  { label: 'Donations',   href: '/dashboard/donations',          icon: Heart,           section: 'main' },
-  { label: 'Members',     href: '/dashboard/members',            icon: Users,           section: 'main' },
-  { label: 'Events',      href: '/dashboard/events',             icon: CalendarDays,    section: 'main' },
-  { label: 'Campaigns',   href: '/dashboard/campaigns',          icon: Megaphone,       section: 'main' },
-  { label: 'Users',       href: '/dashboard/superadmin/users',   icon: UserCog,         roles: ['superadmin'], section: 'super' },
-  { label: 'Audit Log',   href: '/dashboard/superadmin/audit',   icon: ScrollText,      roles: ['superadmin'], section: 'super' },
-  { label: 'Permissions', href: '/dashboard/superadmin',         icon: ShieldCheck,     roles: ['superadmin'], section: 'super' },
+  { label: 'Overview',     href: '/dashboard',                     icon: LayoutDashboard, section: 'main',  exact: true },
+  { label: 'Donations',    href: '/dashboard/donations',           icon: Heart,           section: 'main' },
+  { label: 'Members',      href: '/dashboard/members',             icon: Users,           section: 'main' },
+  { label: 'Events',       href: '/dashboard/events',              icon: CalendarDays,    section: 'main' },
+  { label: 'Campaigns',    href: '/dashboard/campaigns',           icon: Megaphone,       section: 'main' },
+  { label: 'Gallery',      href: '/dashboard/gallery',             icon: Images,          section: 'main' },
+  { label: 'Users',        href: '/dashboard/superadmin/users',    icon: UserCog,         roles: ['superadmin'], section: 'super' },
+  { label: 'Audit Log',    href: '/dashboard/superadmin/audit',    icon: ScrollText,      roles: ['superadmin'], section: 'super' },
+  { label: 'DB Telemetry', href: '/dashboard/superadmin/db-stats', icon: Database,        roles: ['superadmin'], section: 'super' },
+  { label: 'Console',      href: '/dashboard/superadmin',          icon: ShieldCheck,     roles: ['superadmin'], section: 'super', exact: true },
 ];
 
 interface Props { role: UserRole }
@@ -52,9 +57,9 @@ export function DashboardSidebar({ role }: Props) {
 
   function NavLink({ item, index }: { item: NavItem; index: number }) {
     const Icon = item.icon;
-    const isActive = item.href === '/dashboard'
-      ? pathname === '/dashboard'
-      : pathname.startsWith(item.href);
+    const isActive = item.exact
+      ? pathname === item.href
+      : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
     return (
       <motion.div

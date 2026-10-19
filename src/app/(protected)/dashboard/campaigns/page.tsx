@@ -133,11 +133,15 @@ export default async function CampaignsPage() {
                   <Button asChild variant="ghost" size="sm" className="h-8 px-2 text-xs text-primary hover:text-primary">
                     <Link href={`/dashboard/campaigns/${c.id}`}>
                       View details
-                      <ArrowRight size={12} className="ml-1" />
+                      <span className="sr-only"> for {c.title}</span>
+                      <ArrowRight size={12} className="ml-1" aria-hidden="true" />
                     </Link>
                   </Button>
                   <Button asChild variant="outline" size="sm" className="h-8 px-3 text-xs">
-                    <Link href={`/dashboard/campaigns/${c.id}/edit`}>Edit</Link>
+                    <Link href={`/dashboard/campaigns/${c.id}/edit`}>
+                      Edit
+                      <span className="sr-only"> {c.title}</span>
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -148,3 +152,4 @@ export default async function CampaignsPage() {
     </div>
   );
 }
+

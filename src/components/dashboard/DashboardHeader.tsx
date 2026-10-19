@@ -1,7 +1,8 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { Bell, LogOut, Moon, Sun } from 'lucide-react';
+import Link from 'next/link';
+import { ExternalLink, Images, LogOut, Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Button } from '@/components/ui/button';
@@ -47,45 +48,52 @@ export function DashboardHeader({ user }: Props) {
       <div>
         <p className="text-sm font-semibold text-foreground">ONE VOIZE Admin</p>
         <p className="text-xs text-muted-foreground">
-          {new Date().toLocaleDateString('en-NG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          {new Date().toLocaleDateString('en-NG', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
         </p>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
+        <Button asChild variant="outline" size="sm" className="hidden md:inline-flex h-8 gap-1.5 text-xs">
+          <Link href="/dashboard/gallery">
+            <Images size={13} aria-hidden="true" />
+            Gallery
+          </Link>
+        </Button>
+
+        <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground">
+          <a href="/" target="_blank" rel="noopener noreferrer">
+            Live Website
+            <ExternalLink size={12} aria-hidden="true" />
+          </a>
+        </Button>
+
         {/* Theme toggle */}
         {mounted && (
           <motion.div whileTap={tapScale}>
             <Button
+              type="button"
               variant="ghost"
               size="icon-sm"
               onClick={toggleTheme}
-              aria-label="Toggle theme"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
             >
               <motion.div
                 key={theme}
                 initial={{ rotate: -30, opacity: 0, scale: 0.7 }}
-                animate={{ rotate: 0,   opacity: 1, scale: 1 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
                 exit={{ rotate: 30, opacity: 0, scale: 0.7 }}
                 transition={{ type: 'spring', stiffness: 340, damping: 22 }}
               >
-                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+                {theme === 'dark' ? <Sun size={15} aria-hidden="true" /> : <Moon size={15} aria-hidden="true" />}
               </motion.div>
             </Button>
           </motion.div>
         )}
-
-        {/* Notifications */}
-        <motion.div whileTap={tapScale} className="relative">
-          <Button variant="ghost" size="icon-sm" aria-label="Notifications">
-            <Bell size={15} />
-          </Button>
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 16, delay: 0.4 }}
-            className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-destructive"
-          />
-        </motion.div>
 
         <Separator orientation="vertical" className="h-5 mx-1" />
 
@@ -100,23 +108,27 @@ export function DashboardHeader({ user }: Props) {
           </div>
           <div className="hidden sm:block">
             <p className="text-xs font-medium text-foreground leading-tight">{user.name}</p>
-            <p className="text-[10px] text-muted-foreground leading-tight capitalize">{user.role.replace('superadmin', 'super admin')}</p>
+            <p className="text-[10px] text-muted-foreground leading-tight capitalize">
+              {user.role.replace('superadmin', 'super admin')}
+            </p>
           </div>
         </motion.div>
 
         {/* Sign out */}
         <motion.div whileTap={tapScale}>
           <Button
+            type="button"
             variant="ghost"
             size="icon-sm"
             onClick={() => signOut({ callbackUrl: '/dashboard/login' })}
             aria-label="Sign out"
             className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
           >
-            <LogOut size={15} />
+            <LogOut size={15} aria-hidden="true" />
           </Button>
         </motion.div>
       </div>
     </motion.header>
   );
 }
+

@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { CampaignProgress } from '@/components/dashboard/CampaignProgress';
-import { Heart, Users, CalendarDays, Megaphone, ArrowUpRight } from 'lucide-react';
+import { Heart, Users, CalendarDays, Megaphone, ArrowUpRight, Images } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import {
@@ -16,14 +16,17 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
+import { ensureMembersSchemaReady } from '@/lib/members-server';
+
 function fmt(n: number) {
   return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(n);
 }
 
 async function getStats() {
+  await ensureMembersSchemaReady();
   const [donations, members, events, campaigns, recent] = await Promise.all([
     db('SELECT COALESCE(SUM(amount),0) as total, COUNT(*) as count FROM donations WHERE status = $1', ['success']),
-    db('SELECT COUNT(*) as count FROM members WHERE status = $1', ['active']),
+    db("SELECT COUNT(*) FILTER (WHERE status = 'active') as active, COUNT(*) FILTER (WHERE status = 'pending') as pending FROM members"),
     db("SELECT COUNT(*) as count FROM events WHERE status IN ('upcoming','ongoing')"),
     db("SELECT COUNT(*) as count, COALESCE(SUM(goal_amount),0) as goal, COALESCE(SUM(raised_amount),0) as raised FROM campaigns WHERE status = 'active'"),
     db('SELECT donor_name, donor_email, amount, paid_at, campaign FROM donations WHERE status = $1 ORDER BY paid_at DESC LIMIT 8', ['success']),
@@ -31,7 +34,8 @@ async function getStats() {
   return {
     totalRaised: Number(donations[0]?.total ?? 0),
     donationCount: Number(donations[0]?.count ?? 0),
-    memberCount: Number(members[0]?.count ?? 0),
+    memberCount: Number(members[0]?.active ?? 0),
+    pendingMembers: Number(members[0]?.pending ?? 0),
     upcomingEvents: Number(events[0]?.count ?? 0),
     activeCampaigns: Number(campaigns[0]?.count ?? 0),
     campaignGoal: Number(campaigns[0]?.goal ?? 0),
@@ -59,9 +63,15 @@ export default async function DashboardPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs">
+            <Link href="/dashboard/gallery">
+              <Images size={13} aria-hidden="true" />
+              Manage Gallery
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs">
             <Link href="/dashboard/donations">
               View All Donations
-              <ArrowUpRight size={13} />
+              <ArrowUpRight size={13} aria-hidden="true" />
             </Link>
           </Button>
         </div>
@@ -80,7 +90,11 @@ export default async function DashboardPage() {
           label="Active Members"
           value={stats.memberCount}
           numeric
-          sub="Registered club members"
+          sub={
+            stats.pendingMembers > 0
+              ? `${stats.pendingMembers} pending review`
+              : 'Registered club members'
+          }
           icon={<Users size={18} />}
           color="green"
         />

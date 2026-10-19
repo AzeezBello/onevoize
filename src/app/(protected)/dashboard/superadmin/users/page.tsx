@@ -13,6 +13,7 @@ import {
   TableRow,
   TableCell,
 } from '@/components/ui/table';
+import { UserRowActions } from './UserRowActions';
 
 type AdminUser = {
   id: number;
@@ -37,7 +38,7 @@ export default async function UsersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <UserCog size={22} className="text-amber-500" />
+            <UserCog size={22} className="text-amber-500" aria-hidden="true" />
             Admin Accounts
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -46,7 +47,7 @@ export default async function UsersPage() {
         </div>
         <Button asChild size="sm" className="gap-2 self-start sm:self-auto">
           <Link href="/dashboard/superadmin/users/new">
-            <UserPlus size={15} />
+            <UserPlus size={15} aria-hidden="true" />
             Add User
           </Link>
         </Button>
@@ -108,20 +109,12 @@ export default async function UsersPage() {
                       {new Date(u.created_at).toLocaleDateString('en-NG')}
                     </TableCell>
                     <TableCell className="text-right py-3.5">
-                      <div className="inline-flex items-center gap-2">
-                        <Button asChild variant="ghost" size="sm" className="h-7 px-2 text-xs">
-                          <Link href={`/dashboard/superadmin/users/${u.id}/edit`}>
-                            Edit
-                          </Link>
-                        </Button>
-                        {u.id !== Number(session.user.id) && (
-                          <Button asChild variant="outline" size="sm" className="h-7 px-2.5 text-xs text-muted-foreground hover:text-foreground">
-                            <Link href={`/dashboard/superadmin/users/${u.id}/toggle`}>
-                              {u.is_active ? 'Disable' : 'Enable'}
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
+                      <UserRowActions
+                        userId={u.id}
+                        userName={u.name}
+                        isActive={u.is_active}
+                        isSelf={u.id === Number(session.user.id)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))
@@ -133,3 +126,4 @@ export default async function UsersPage() {
     </div>
   );
 }
+

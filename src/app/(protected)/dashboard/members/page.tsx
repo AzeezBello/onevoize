@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { ensureMembersSchemaReady } from '@/lib/members-server';
 import { Users, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { FilterTabs } from '@/components/dashboard/FilterTabs';
@@ -12,32 +13,54 @@ import {
   TableRow,
   TableCell,
 } from '@/components/ui/table';
+import { MemberRowActions } from './MemberRowActions';
 
 type Member = {
   id: number;
   full_name: string;
   email: string | null;
   phone: string | null;
+  occupation: string | null;
   membership_no: string | null;
   status: string;
   joined_at: string;
 };
 
 const statusBadgeClasses: Record<string, string> = {
+  pending:   'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
   active:    'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
   inactive:  'bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700',
   suspended: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800',
 };
 
+const statusLabels: Record<string, string> = {
+  pending:   'Pending Review',
+  active:    'Active',
+  inactive:  'Inactive',
+  suspended: 'Suspended',
+};
+
 async function getMembers(status?: string): Promise<Member[]> {
-  const where = status ? `WHERE status = '${status}'` : '';
-  const rows = await db(`SELECT * FROM members ${where} ORDER BY joined_at DESC`);
+  await ensureMembersSchemaReady();
+  if (status && ['pending', 'active', 'inactive', 'suspended'].includes(status)) {
+    const rows = await db(
+      'SELECT * FROM members WHERE status = $1 ORDER BY joined_at DESC, id DESC',
+      [status],
+    );
+    return rows as unknown as Member[];
+  }
+  const rows = await db(
+    `SELECT * FROM members
+     ORDER BY CASE WHEN status = 'pending' THEN 0 ELSE 1 END, joined_at DESC, id DESC`,
+  );
   return rows as unknown as Member[];
 }
 
 async function getSummary() {
+  await ensureMembersSchemaReady();
   const rows = await db(`
     SELECT
+      COUNT(*) FILTER (WHERE status='pending')   as pending,
       COUNT(*) FILTER (WHERE status='active')    as active,
       COUNT(*) FILTER (WHERE status='inactive')  as inactive,
       COUNT(*) FILTER (WHERE status='suspended') as suspended
@@ -56,10 +79,11 @@ export default async function MembersPage({
   const [members, summary] = await Promise.all([getMembers(status), getSummary()]);
 
   const tabs = [
-    { label: 'All Members', value: '' },
-    { label: 'Active',      value: 'active' },
-    { label: 'Inactive',    value: 'inactive' },
-    { label: 'Suspended',   value: 'suspended' },
+    { label: 'All Members',    value: '' },
+    { label: 'Pending Review', value: 'pending' },
+    { label: 'Active',         value: 'active' },
+    { label: 'Inactive',       value: 'inactive' },
+    { label: 'Suspended',      value: 'suspended' },
   ];
 
   return (
@@ -67,31 +91,50 @@ export default async function MembersPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Users size={20} className="text-primary" />
-            Members Directory
+            <Users size={20} className="text-primary" aria-hidden="true" />
+            Members &amp; Applications
           </h2>
           <p className="text-sm text-muted-foreground">
-            Manage registered club members, statuses, and profiles.
+            Review submitted membership registrations and manage active club members.
           </p>
         </div>
         <Button asChild size="sm" className="gap-2 self-start sm:self-auto">
           <Link href="/dashboard/members/new">
-            <UserPlus size={15} />
+            <UserPlus size={15} aria-hidden="true" />
             Add Member
           </Link>
         </Button>
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Active',    value: String(summary?.active ?? 0),    color: 'text-emerald-600 dark:text-emerald-400' },
-          { label: 'Inactive',  value: String(summary?.inactive ?? 0),  color: 'text-muted-foreground' },
-          { label: 'Suspended', value: String(summary?.suspended ?? 0), color: 'text-rose-600 dark:text-rose-400' },
+          {
+            label: 'Pending Review',
+            value: String(summary?.pending ?? 0),
+            color: 'text-amber-600 dark:text-amber-400',
+          },
+          {
+            label: 'Active',
+            value: String(summary?.active ?? 0),
+            color: 'text-emerald-600 dark:text-emerald-400',
+          },
+          {
+            label: 'Inactive',
+            value: String(summary?.inactive ?? 0),
+            color: 'text-muted-foreground',
+          },
+          {
+            label: 'Suspended',
+            value: String(summary?.suspended ?? 0),
+            color: 'text-rose-600 dark:text-rose-400',
+          },
         ].map(s => (
           <Card key={s.label} className="border border-border/80 shadow-none">
             <CardContent className="p-4">
-              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{s.label}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                {s.label}
+              </p>
               <p className={`text-xl font-bold mt-1 tabular-nums ${s.color}`}>{s.value}</p>
             </CardContent>
           </Card>
@@ -114,19 +157,20 @@ export default async function MembersPage({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Member No.</TableHead>
+                <TableHead>Member / Ref No.</TableHead>
                 <TableHead>Full Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Joined</TableHead>
+                <TableHead>Submitted / Joined</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {members.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-12 text-center text-muted-foreground text-sm">
-                    No members found matching this filter.
+                  <TableCell colSpan={7} className="py-12 text-center text-muted-foreground text-sm">
+                    No members or applications found matching this filter.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -135,8 +179,13 @@ export default async function MembersPage({
                     <TableCell className="font-mono text-xs text-muted-foreground py-3.5">
                       {m.membership_no || '—'}
                     </TableCell>
-                    <TableCell className="py-3.5 font-medium text-foreground group-hover:text-primary transition-colors">
-                      {m.full_name}
+                    <TableCell className="py-3.5">
+                      <p className="font-medium text-foreground group-hover:text-primary transition-colors">
+                        {m.full_name}
+                      </p>
+                      {m.occupation && (
+                        <p className="text-xs text-muted-foreground">{m.occupation}</p>
+                      )}
                     </TableCell>
                     <TableCell className="text-muted-foreground text-xs py-3.5">
                       {m.email || '—'}
@@ -145,12 +194,19 @@ export default async function MembersPage({
                       {m.phone || '—'}
                     </TableCell>
                     <TableCell className="py-3.5">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border capitalize ${statusBadgeClasses[m.status] || ''}`}>
-                        {m.status}
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border ${
+                          statusBadgeClasses[m.status] || ''
+                        }`}
+                      >
+                        {statusLabels[m.status] || m.status}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right text-muted-foreground text-xs tabular-nums py-3.5">
+                    <TableCell className="text-muted-foreground text-xs tabular-nums py-3.5">
                       {new Date(m.joined_at).toLocaleDateString('en-NG')}
+                    </TableCell>
+                    <TableCell className="text-right py-3.5">
+                      <MemberRowActions id={m.id} fullName={m.full_name} status={m.status} />
                     </TableCell>
                   </TableRow>
                 ))

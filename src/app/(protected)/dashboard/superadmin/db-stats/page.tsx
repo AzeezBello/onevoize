@@ -3,12 +3,15 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { Database, Table2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { ensureGalleryReady } from '@/lib/gallery-server';
 
 export default async function DbStatsPage() {
   const session = await auth();
   if (!session?.user || session.user.role !== 'superadmin') redirect('/dashboard');
 
-  const tables = ['users', 'donations', 'members', 'events', 'campaigns', 'audit_logs'];
+  await ensureGalleryReady();
+
+  const tables = ['users', 'donations', 'members', 'events', 'campaigns', 'gallery_items', 'audit_logs'];
   const counts = await Promise.all(
     tables.map(async t => {
       const rows = await db(`SELECT COUNT(*) as count FROM ${t}`);
