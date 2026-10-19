@@ -6,9 +6,9 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center">
+        <div className="dashboard-shell flex min-h-dvh items-center justify-center">
           <p>Loading login...</p>
-        </main>
+        </div>
       }
     >
       <LoginForm />

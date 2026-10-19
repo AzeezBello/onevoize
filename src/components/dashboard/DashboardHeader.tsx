@@ -43,7 +43,7 @@ export function DashboardHeader({ user }: Props) {
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-      className="flex items-center justify-between px-6 py-3 border-b border-border bg-card shrink-0"
+      className="flex h-16 items-center justify-between px-6 border-b border-border bg-card shrink-0"
     >
       <div>
         <p className="text-sm font-semibold text-foreground">ONE VOIZE Admin</p>

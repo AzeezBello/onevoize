@@ -40,7 +40,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="dashboard-shell min-h-dvh flex items-center justify-center bg-background p-4">
       <motion.div
         {...fadeUp}
         className="w-full max-w-sm"

@@ -113,11 +113,11 @@ export function DashboardSidebar({ role }: Props) {
       {...slideInLeft}
       animate={{ opacity: 1, x: 0, width: collapsed ? 64 : 240 }}
       transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-      className="relative flex flex-col bg-sidebar border-r border-sidebar-border overflow-hidden"
+      className="relative z-20 flex flex-col bg-sidebar border-r border-sidebar-border"
       style={{ minWidth: collapsed ? 64 : 240 }}
     >
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-4 py-5 border-b border-sidebar-border shrink-0">
+      <div className="flex h-16 items-center gap-2.5 px-4 border-b border-sidebar-border shrink-0 overflow-hidden">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm shrink-0 shadow-sm shadow-primary/30">
           OV
         </div>
@@ -191,11 +191,12 @@ export function DashboardSidebar({ role }: Props) {
 
       {/* Collapse toggle */}
       <motion.button
+        type="button"
         onClick={() => setCollapsed(c => !c)}
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
         transition={{ type: 'spring', stiffness: 440, damping: 22 }}
-        className="absolute -right-3.5 top-7 flex h-7 w-7 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm hover:text-foreground z-10"
+        className="absolute -right-3.5 top-[50px] flex h-7 w-7 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm hover:text-foreground z-30"
         aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}

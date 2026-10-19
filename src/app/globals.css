@@ -131,7 +131,7 @@
 .portrait{position:relative;width:100%;overflow:hidden;border-radius:16px;background:var(--surface)}
 .portrait img{object-fit:cover;object-position:center top}
 /* Pages without a dark hero need clearance under the fixed navbar */
-main > :first-child:not(.home-hero):not(.page-hero){padding-top:calc(var(--nav-height) + 48px)}
+body:has(.site-navbar) > main > :first-child:not(.home-hero):not(.page-hero):not(.dashboard-shell){padding-top:calc(var(--nav-height) + 48px)}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:999px;padding:13px 22px;font-weight:700;font-size:15px;line-height:1.2;border:1px solid transparent;cursor:pointer;text-align:center;transition:background .2s,color .2s,transform .2s,box-shadow .2s,border-color .2s}
@@ -414,7 +414,7 @@ main > :first-child:not(.home-hero):not(.page-hero){padding-top:calc(var(--nav-h
   .gallery-lightbox-next{right:10px}
   .gallery-lightbox-caption{bottom:14px;width:calc(100% - 32px);font-size:13px;line-height:1.5}
   .footer-grid{grid-template-columns:1fr}
-  main > :first-child:not(.home-hero):not(.page-hero){padding-top:calc(var(--nav-height) + 36px)}
+  body:has(.site-navbar) > main > :first-child:not(.home-hero):not(.page-hero):not(.dashboard-shell){padding-top:calc(var(--nav-height) + 36px)}
 }
 
 @media (max-width: 640px) {
