@@ -1,7 +1,13 @@
 import DonationForm from '@/components/donations/DonationForm'
 import { ShieldCheck, HeartHandshake, Award } from 'lucide-react'
 
-export default function Donate() {
+export default async function Donate({
+  searchParams,
+}: {
+  searchParams: Promise<{ campaign?: string }>
+}) {
+  const { campaign } = await searchParams
+
   return (
     <section className="section" style={{ background: 'var(--surface)' }}>
       <div className="container" style={{ maxWidth: 800 }}>
@@ -33,7 +39,7 @@ export default function Donate() {
           </div>
         </div>
 
-        <DonationForm />
+        <DonationForm campaignId={campaign} />
       </div>
     </section>
   )
